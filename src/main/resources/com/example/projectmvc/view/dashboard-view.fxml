@@ -11,6 +11,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.projectmvc.controller.DashboardController"
             minWidth="600.0"
             minHeight="400.0"
             prefWidth="900.0"
@@ -69,11 +70,13 @@
 
             <Button text="Coffee Menu"
                     maxWidth="Infinity"
-                    prefHeight="40.0"/>
+                    prefHeight="40.0"
+                    onAction="#openCoffeeMenu"/>
 
             <Button text="Orders"
                     maxWidth="Infinity"
                     prefHeight="40.0"/>
+
 
             <Button text="Billing"
                     maxWidth="Infinity"
