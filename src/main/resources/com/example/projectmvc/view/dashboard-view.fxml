@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            minWidth="600.0"
+            minHeight="400.0"
+            prefWidth="900.0"
+            prefHeight="600.0">
+
+    <!-- Top Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="20.0"
+              style="-fx-background-color: #6F4E37;">
+
+            <padding>
+                <Insets top="18.0"
+                        right="25.0"
+                        bottom="18.0"
+                        left="25.0"/>
+            </padding>
+
+            <Label text="CoffeeFlow ☕"
+                   textFill="WHITE">
+
+                <font>
+                    <Font name="System Bold" size="26.0"/>
+                </font>
+
+            </Label>
+
+            <Label text="Coffee Shop Management System"
+                   textFill="WHITE">
+
+                <font>
+                    <Font size="16.0"/>
+                </font>
+
+            </Label>
+
+        </HBox>
+    </top>
+
+    <!-- Left Navigation -->
+    <left>
+        <VBox spacing="12.0"
+              prefWidth="180.0"
+              style="-fx-background-color: #F5E6D3;">
+
+            <padding>
+                <Insets top="25.0"
+                        right="15.0"
+                        bottom="25.0"
+                        left="15.0"/>
+            </padding>
+
+            <Button text="Dashboard"
+                    maxWidth="Infinity"
+                    prefHeight="40.0"/>
+
+            <Button text="Coffee Menu"
+                    maxWidth="Infinity"
+                    prefHeight="40.0"/>
+
+            <Button text="Orders"
+                    maxWidth="Infinity"
+                    prefHeight="40.0"/>
+
+            <Button text="Billing"
+                    maxWidth="Infinity"
+                    prefHeight="40.0"/>
+
+            <Button text="Logout"
+                    maxWidth="Infinity"
+                    prefHeight="40.0"/>
+
+        </VBox>
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <VBox alignment="CENTER"
+              spacing="25.0">
+
+            <padding>
+                <Insets top="30.0"
+                        right="30.0"
+                        bottom="30.0"
+                        left="30.0"/>
+            </padding>
+
+            <Label text="Welcome to CoffeeFlow">
+
+                <font>
+                    <Font name="System Bold" size="30.0"/>
+                </font>
+
+            </Label>
+
+            <Label text="Manage your coffee shop easily and efficiently."
+                   wrapText="true">
+
+                <font>
+                    <Font size="17.0"/>
+                </font>
+
+            </Label>
+
+            <HBox alignment="CENTER"
+                  spacing="20.0">
+
+                <VBox alignment="CENTER"
+                      spacing="8.0"
+                      prefWidth="180.0"
+                      prefHeight="120.0"
+                      style="-fx-background-color: #F5E6D3;">
+
+                    <Label text="☕">
+
+                        <font>
+                            <Font size="30.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Coffee Menu">
+
+                        <font>
+                            <Font name="System Bold" size="16.0"/>
+                        </font>
+
+                    </Label>
+
+                </VBox>
+
+                <VBox alignment="CENTER"
+                      spacing="8.0"
+                      prefWidth="180.0"
+                      prefHeight="120.0"
+                      style="-fx-background-color: #F5E6D3;">
+
+                    <Label text="🛒">
+
+                        <font>
+                            <Font size="30.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Orders">
+
+                        <font>
+                            <Font name="System Bold" size="16.0"/>
+                        </font>
+
+                    </Label>
+
+                </VBox>
+
+                <VBox alignment="CENTER"
+                      spacing="8.0"
+                      prefWidth="180.0"
+                      prefHeight="120.0"
+                      style="-fx-background-color: #F5E6D3;">
+
+                    <Label text="💰">
+
+                        <font>
+                            <Font size="30.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Billing">
+
+                        <font>
+                            <Font name="System Bold" size="16.0"/>
+                        </font>
+
+                    </Label>
+
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
