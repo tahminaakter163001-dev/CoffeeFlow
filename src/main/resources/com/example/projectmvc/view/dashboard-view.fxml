@@ -83,7 +83,9 @@
                     prefHeight="40.0"/>
 
             <Button text="Logout"
+                    onAction="#logout"
                     maxWidth="Infinity"
+                    prefWidth="120.0"
                     prefHeight="40.0"/>
 
         </VBox>

@@ -1,4 +1,4 @@
-package com.example.projectmvc.controller;
+ package com.example.projectmvc.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,39 +19,81 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+
     @FXML
     private void handleLogin(ActionEvent event) throws Exception {
 
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        String username =
+                usernameField.getText().trim();
 
-        if (username.equals("admin") && password.equals("1234")) {
+        String password =
+                passwordField.getText().trim();
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(
-                            "/com/example/projectmvc/view/dashboard-view.fxml"
-                    )
+
+        // ADMIN LOGIN
+        if (username.equals("admin")
+                && password.equals("1234")) {
+
+            openPage(
+                    event,
+                    "/com/example/projectmvc/view/dashboard-view.fxml",
+                    "CoffeeFlow - Admin Dashboard"
             );
 
-            Parent dashboard = loader.load();
+        }
 
-            Stage stage = (Stage) ((Node) event.getSource())
-                    .getScene()
-                    .getWindow();
+        // CUSTOMER LOGIN
+        else if (username.equals("customer")
+                && password.equals("1234")) {
 
-            Scene scene = new Scene(dashboard);
+            openPage(
+                    event,
+                    "/com/example/projectmvc/view/customer-dashboard-view.fxml",
+                    "CoffeeFlow - Customer Dashboard"
+            );
 
-            stage.setScene(scene);
-            stage.setTitle("CoffeeFlow - Dashboard");
-            stage.show();
+        }
 
-        } else {
+        // INVALID LOGIN
+        else {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert =
+                    new Alert(Alert.AlertType.ERROR);
+
             alert.setTitle("Login Failed");
             alert.setHeaderText(null);
-            alert.setContentText("Invalid username or password.");
+
+            alert.setContentText(
+                    "Invalid username or password."
+            );
+
             alert.showAndWait();
         }
+    }
+
+
+    private void openPage(
+            ActionEvent event,
+            String fxmlPath,
+            String title) throws Exception {
+
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(fxmlPath)
+                );
+
+        Parent page = loader.load();
+
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.setScene(
+                new Scene(page)
+        );
+
+        stage.setTitle(title);
+        stage.show();
     }
 }

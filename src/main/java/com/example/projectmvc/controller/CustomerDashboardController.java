@@ -8,28 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class DashboardController {
+public class CustomerDashboardController {
 
-    public void openCoffeeMenu(ActionEvent event) throws Exception {
-
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource(
-                        "/com/example/projectmvc/view/menu-view.fxml"
-                )
-        );
-
-        Parent menuPage = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource())
-                .getScene()
-                .getWindow();
-
-        Scene scene = new Scene(menuPage);
-
-        stage.setScene(scene);
-        stage.setTitle("CoffeeFlow - Coffee Menu");
-        stage.show();
-    }
     @FXML
     private void openOrder(ActionEvent event) throws Exception {
 
@@ -48,6 +28,13 @@ public class DashboardController {
         stage.setScene(new Scene(orderPage));
         stage.setTitle("CoffeeFlow - New Order");
         stage.show();
+    }
+
+
+    @FXML
+    private void openMyOrders(ActionEvent event) {
+
+        System.out.println("My Orders clicked.");
     }
 
     @FXML
@@ -69,5 +56,5 @@ public class DashboardController {
         stage.setTitle("CoffeeFlow - Login");
         stage.show();
     }
-
 }
+
