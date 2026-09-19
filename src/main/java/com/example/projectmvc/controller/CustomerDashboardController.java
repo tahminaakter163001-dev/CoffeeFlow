@@ -1,4 +1,5 @@
 package com.example.projectmvc.controller;
+import com.example.projectmvc.SessionManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,15 +31,40 @@ public class CustomerDashboardController {
         stage.show();
     }
 
-
     @FXML
-    private void openMyOrders(ActionEvent event) {
+    private void openMyOrders(ActionEvent event)
+            throws Exception {
 
-        System.out.println("My Orders clicked.");
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/com/example/projectmvc/view/my-orders-view.fxml"
+                        )
+                );
+
+        Parent myOrdersPage =
+                loader.load();
+
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.setScene(
+                new Scene(myOrdersPage)
+        );
+
+        stage.setTitle(
+                "CoffeeFlow - My Orders"
+        );
+
+        stage.show();
     }
 
     @FXML
     private void logout(ActionEvent event) throws Exception {
+
+        SessionManager.clearSession();
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(

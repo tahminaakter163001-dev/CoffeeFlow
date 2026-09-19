@@ -1,4 +1,6 @@
- package com.example.projectmvc.controller;
+package com.example.projectmvc.controller;
+
+import com.example.projectmvc.SessionManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,9 +21,9 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-
     @FXML
-    private void handleLogin(ActionEvent event) throws Exception {
+    private void handleLogin(ActionEvent event)
+            throws Exception {
 
         String username =
                 usernameField.getText().trim();
@@ -29,29 +31,30 @@ public class LoginController {
         String password =
                 passwordField.getText().trim();
 
-
         // ADMIN LOGIN
         if (username.equals("admin")
                 && password.equals("1234")) {
+
+            SessionManager.setUsername(username);
 
             openPage(
                     event,
                     "/com/example/projectmvc/view/dashboard-view.fxml",
                     "CoffeeFlow - Admin Dashboard"
             );
-
         }
 
         // CUSTOMER LOGIN
         else if (username.equals("customer")
                 && password.equals("1234")) {
 
+            SessionManager.setUsername(username);
+
             openPage(
                     event,
                     "/com/example/projectmvc/view/customer-dashboard-view.fxml",
                     "CoffeeFlow - Customer Dashboard"
             );
-
         }
 
         // INVALID LOGIN
@@ -71,11 +74,11 @@ public class LoginController {
         }
     }
 
-
     private void openPage(
             ActionEvent event,
             String fxmlPath,
-            String title) throws Exception {
+            String title)
+            throws Exception {
 
         FXMLLoader loader =
                 new FXMLLoader(

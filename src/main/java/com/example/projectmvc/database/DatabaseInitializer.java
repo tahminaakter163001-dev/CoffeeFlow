@@ -8,7 +8,7 @@ public class DatabaseInitializer {
 
     public static void createTables() {
 
-        String sql = """
+        String coffeeTable = """
                 CREATE TABLE IF NOT EXISTS coffee (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
@@ -17,15 +17,29 @@ public class DatabaseInitializer {
                 );
                 """;
 
+        String ordersTable = """
+                CREATE TABLE IF NOT EXISTS orders (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    customer_name TEXT NOT NULL,
+                    coffee_name TEXT NOT NULL,
+                    size TEXT NOT NULL,
+                    quantity INTEGER NOT NULL,
+                    price REAL NOT NULL,
+                    total REAL NOT NULL,
+                    order_date TEXT NOT NULL
+                );
+                """;
+
         try (Connection connection =
                      DatabaseConnection.getConnection();
              Statement statement =
                      connection.createStatement()) {
 
-            statement.execute(sql);
+            statement.execute(coffeeTable);
+            statement.execute(ordersTable);
 
             System.out.println(
-                    "Coffee table created successfully!"
+                    "Database tables created successfully!"
             );
 
         } catch (SQLException e) {

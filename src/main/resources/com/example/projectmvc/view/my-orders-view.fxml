@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.geometry.Insets?>
+        <?import javafx.geometry.Pos?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.TableColumn?>
+        <?import javafx.scene.control.TableView?>
+        <?import javafx.scene.layout.BorderPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.VBox?>
+        <?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.projectmvc.controller.MyOrdersController">
+
+    <padding>
+        <Insets top="30.0"
+                right="40.0"
+                bottom="30.0"
+                left="40.0"/>
+    </padding>
+
+    <top>
+        <VBox spacing="8.0"
+              alignment="CENTER">
+
+            <Label text="My Orders">
+                <font>
+                    <Font name="System Bold"
+                          size="28.0"/>
+                </font>
+            </Label>
+
+            <Label text="Your previous coffee orders"
+                   style="-fx-text-fill: #666666;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="ordersTable"
+                   prefHeight="400.0">
+
+            <columns>
+
+                <TableColumn fx:id="idColumn"
+                             text="Order ID"
+                             prefWidth="80.0"/>
+
+                <TableColumn fx:id="coffeeColumn"
+                             text="Coffee"
+                             prefWidth="160.0"/>
+
+                <TableColumn fx:id="sizeColumn"
+                             text="Size"
+                             prefWidth="100.0"/>
+
+                <TableColumn fx:id="quantityColumn"
+                             text="Quantity"
+                             prefWidth="90.0"/>
+
+                <TableColumn fx:id="priceColumn"
+                             text="Price"
+                             prefWidth="100.0"/>
+
+                <TableColumn fx:id="totalColumn"
+                             text="Total"
+                             prefWidth="100.0"/>
+
+                <TableColumn fx:id="dateColumn"
+                             text="Order Date"
+                             prefWidth="170.0"/>
+
+            </columns>
+
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT"
+              spacing="12.0">
+
+            <Button text="Back"
+                    onAction="#goBack"
+                    prefWidth="100.0"
+                    prefHeight="38.0"/>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

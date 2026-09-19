@@ -1,4 +1,5 @@
 package com.example.projectmvc.controller;
+import com.example.projectmvc.SessionManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,6 +54,7 @@ public class DashboardController {
     @FXML
     private void logout(ActionEvent event) throws Exception {
 
+        SessionManager.clearSession();
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
                         "/com/example/projectmvc/view/login-view.fxml"

@@ -3,6 +3,8 @@ package com.example.projectmvc.controller;
 import com.example.projectmvc.database.CoffeeDAO;
 import com.example.projectmvc.model.CoffeeMenuRow;
 import com.example.projectmvc.model.OrderItem;
+import com.example.projectmvc.database.OrderDAO;
+import com.example.projectmvc.SessionManager;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,6 +56,7 @@ public class OrderController {
 
     private ObservableList<CoffeeMenuRow> coffeeList;
 
+    private final OrderDAO orderDAO = new OrderDAO();
 
     @FXML
     private void initialize() {
@@ -230,7 +233,6 @@ public class OrderController {
         alert.showAndWait();
     }
 
-
     @FXML
     private void handlePlaceOrder(ActionEvent event) {
 
@@ -243,12 +245,21 @@ public class OrderController {
             return;
         }
 
+        String customerName = SessionManager.getUsername();
+
+        for (OrderItem item : cart) {
+
+            orderDAO.saveOrder(
+                    customerName,
+                    item
+            );
+        }
+
         showMessage(
                 "Order placed successfully!"
         );
 
         cart.clear();
-
         updateTotal();
     }
 
