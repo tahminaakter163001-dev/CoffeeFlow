@@ -2,6 +2,9 @@ package com.example.projectmvc.controller;
 
 import com.example.projectmvc.database.CoffeeDAO;
 import com.example.projectmvc.model.CoffeeMenuRow;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import com.example.projectmvc.controller.EditCoffeeController;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -63,7 +66,7 @@ public class MenuController {
                 cellData -> cellData.getValue().largePriceProperty()
         );
 
-        loadCoffeeData();
+        setupSearch();
     }
 
     private void loadCoffeeData() {
@@ -72,6 +75,79 @@ public class MenuController {
                 coffeeDAO.getAllCoffeeMenuRows();
 
         coffeeTable.setItems(coffeeList);
+    }
+
+    private void setupSearch() {
+
+        ObservableList<CoffeeMenuRow> coffeeList =
+                coffeeDAO.getAllCoffeeMenuRows();
+
+        FilteredList<CoffeeMenuRow> filteredData =
+                new FilteredList<>(coffeeList, p -> true);
+
+        searchField.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+
+                    filteredData.setPredicate(coffee -> {
+
+                        if (newValue == null ||
+                                newValue.isEmpty()) {
+
+                            return true;
+                        }
+
+                        String searchText =
+                                newValue.toLowerCase();
+
+                        return coffee.getName()
+                                .toLowerCase()
+                                .contains(searchText);
+                    });
+                }
+        );
+
+        SortedList<CoffeeMenuRow> sortedData =
+                new SortedList<>(filteredData);
+
+        sortedData.comparatorProperty().bind(
+                coffeeTable.comparatorProperty()
+        );
+
+        coffeeTable.setItems(sortedData);
+    }
+
+
+    @FXML
+    private void openEditCoffee(ActionEvent event) throws Exception {
+
+        CoffeeMenuRow selectedCoffee =
+                coffeeTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCoffee == null) {
+            System.out.println("Please select a coffee first.");
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource(
+                        "/com/example/projectmvc/view/edit-coffee-view.fxml"
+                )
+        );
+
+        Parent editPage = loader.load();
+
+        EditCoffeeController controller =
+                loader.getController();
+
+        controller.setSelectedCoffee(selectedCoffee);
+
+        Stage stage = (Stage) ((Node) event.getSource())
+                .getScene()
+                .getWindow();
+
+        stage.setScene(new Scene(editPage));
+        stage.setTitle("CoffeeFlow - Edit Coffee");
+        stage.show();
     }
 
     @FXML

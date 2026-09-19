@@ -108,4 +108,47 @@ public class CoffeeDAO {
 
         return coffeeList;
     }
+
+    public void updateCoffee(
+            String oldName,
+            String newName,
+            double smallPrice,
+            double mediumPrice,
+            double largePrice) {
+
+        String sql = """
+            UPDATE coffee
+            SET name = ?,
+                price = CASE
+                    WHEN size = 'Small' THEN ?
+                    WHEN size = 'Medium' THEN ?
+                    WHEN size = 'Large' THEN ?
+                END
+            WHERE name = ?
+            """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, newName);
+            statement.setDouble(2, smallPrice);
+            statement.setDouble(3, mediumPrice);
+            statement.setDouble(4, largePrice);
+            statement.setString(5, oldName);
+
+            statement.executeUpdate();
+
+            System.out.println(
+                    "Coffee updated successfully!"
+            );
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Update error: " + e.getMessage()
+            );
+        }
+    }
 }

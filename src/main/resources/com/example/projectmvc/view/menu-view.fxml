@@ -113,6 +113,7 @@
 
                 <Button fx:id="editButton"
                         text="Edit"
+                        onAction="#openEditCoffee"
                         prefWidth="100.0"
                         prefHeight="35.0"/>
 
