@@ -16,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 public class OrderController {
 
@@ -50,6 +52,7 @@ public class OrderController {
     private Label totalLabel;
 
     private final CoffeeDAO coffeeDAO = new CoffeeDAO();
+    @FXML private Button placeOrderButton;
 
     private final ObservableList<OrderItem> cart =
             FXCollections.observableArrayList();
@@ -244,23 +247,78 @@ public class OrderController {
 
             return;
         }
+        placeOrderButton.setDisable(true);
+        String customerName =
+                SessionManager.getUsername();
 
-        String customerName = SessionManager.getUsername();
+        ObservableList<OrderItem> orderItems =
+                FXCollections.observableArrayList(cart);
 
-        for (OrderItem item : cart) {
+        Task<Boolean> orderTask =
+                new Task<>() {
 
-            orderDAO.saveOrder(
-                    customerName,
-                    item
+                    @Override
+                    protected Boolean call() {
+
+                        boolean success = true;
+
+                        for (OrderItem item : orderItems) {
+
+                            boolean saved =
+                                    orderDAO.saveOrder(
+                                            customerName,
+                                            item
+                                    );
+
+                            if (!saved) {
+                                success = false;
+                                break;
+                            }
+                        }
+
+                        return success;
+                    }
+                };
+
+        orderTask.setOnSucceeded(e -> {
+
+            placeOrderButton.setDisable(false);
+
+            boolean success =
+                    orderTask.getValue();
+
+            if (success) {
+
+                cart.clear();
+                updateTotal();
+
+                showMessage(
+                        "Order placed successfully!"
+                );
+
+            } else {
+
+                showMessage(
+                        "Failed to place order."
+                );
+            }
+        });
+
+        orderTask.setOnFailed(e -> {
+
+            placeOrderButton.setDisable(false);
+
+            showMessage(
+                    "An error occurred while placing the order."
             );
-        }
+        });
 
-        showMessage(
-                "Order placed successfully!"
-        );
+        Thread orderThread =
+                new Thread(orderTask);
 
-        cart.clear();
-        updateTotal();
+        orderThread.setDaemon(true);
+
+        orderThread.start();
     }
 
     @FXML

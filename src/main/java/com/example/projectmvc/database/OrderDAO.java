@@ -15,16 +15,16 @@ import java.time.format.DateTimeFormatter;
 
 public class OrderDAO {
 
-    public void saveOrder(
+    public boolean saveOrder(
             String customerName,
             OrderItem item) {
 
         String sql = """
-                INSERT INTO orders
-                (customer_name, coffee_name, size,
-                 quantity, price, total, order_date)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """;
+            INSERT INTO orders
+            (customer_name, coffee_name, size,
+             quantity, price, total, order_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """;
 
         try (Connection connection =
                      DatabaseConnection.getConnection();
@@ -58,10 +58,9 @@ public class OrderDAO {
             String orderDate =
                     LocalDateTime.now()
                             .format(
-                                    DateTimeFormatter
-                                            .ofPattern(
-                                                    "yyyy-MM-dd HH:mm:ss"
-                                            )
+                                    DateTimeFormatter.ofPattern(
+                                            "yyyy-MM-dd HH:mm:ss"
+                                    )
                             );
 
             statement.setString(
@@ -74,14 +73,19 @@ public class OrderDAO {
                     "Order saved successfully!"
             );
 
+            return true;
+
         } catch (SQLException e) {
 
             System.out.println(
                     "Order save error: "
                             + e.getMessage()
             );
+
+            return false;
         }
     }
+
     public ObservableList<OrderHistory> getCustomerOrders(
             String customerName) {
 
