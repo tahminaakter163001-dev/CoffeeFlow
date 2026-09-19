@@ -1,6 +1,8 @@
 package com.example.projectmvc.controller;
 
 import com.example.projectmvc.SessionManager;
+import com.example.projectmvc.database.UserDAO;
+import com.example.projectmvc.model.User;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +23,8 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    private final UserDAO userDAO = new UserDAO();
+
     @FXML
     private void handleLogin(ActionEvent event)
             throws Exception {
@@ -29,36 +33,56 @@ public class LoginController {
                 usernameField.getText().trim();
 
         String password =
-                passwordField.getText().trim();
+                passwordField.getText();
 
-        // ADMIN LOGIN
-        if (username.equals("admin")
-                && password.equals("1234")) {
+        if (username.isEmpty()
+                || password.isEmpty()) {
 
-            SessionManager.setUsername(username);
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING);
 
-            openPage(
-                    event,
-                    "/com/example/projectmvc/view/dashboard-view.fxml",
-                    "CoffeeFlow - Admin Dashboard"
+            alert.setTitle("Login");
+            alert.setHeaderText(null);
+
+            alert.setContentText(
+                    "Please enter username and password."
             );
+
+            alert.showAndWait();
+
+            return;
         }
 
-        // CUSTOMER LOGIN
-        else if (username.equals("customer")
-                && password.equals("1234")) {
+        User user =
+                userDAO.loginUser(
+                        username,
+                        password
+                );
 
-            SessionManager.setUsername(username);
+        if (user != null) {
 
-            openPage(
-                    event,
-                    "/com/example/projectmvc/view/customer-dashboard-view.fxml",
-                    "CoffeeFlow - Customer Dashboard"
+            SessionManager.setUsername(
+                    user.getUsername()
             );
-        }
 
-        // INVALID LOGIN
-        else {
+            if (user.getRole().equals("admin")) {
+
+                openPage(
+                        event,
+                        "/com/example/projectmvc/view/dashboard-view.fxml",
+                        "CoffeeFlow - Admin Dashboard"
+                );
+
+            } else if (user.getRole().equals("customer")) {
+
+                openPage(
+                        event,
+                        "/com/example/projectmvc/view/customer-dashboard-view.fxml",
+                        "CoffeeFlow - Customer Dashboard"
+                );
+            }
+
+        } else {
 
             Alert alert =
                     new Alert(Alert.AlertType.ERROR);
@@ -99,4 +123,34 @@ public class LoginController {
         stage.setTitle(title);
         stage.show();
     }
+    @FXML
+    private void openRegister(ActionEvent event)
+            throws Exception {
+
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/com/example/projectmvc/view/register-view.fxml"
+                        )
+                );
+
+        Parent registerPage =
+                loader.load();
+
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.setScene(
+                new Scene(registerPage)
+        );
+
+        stage.setTitle(
+                "CoffeeFlow - Create Account"
+        );
+
+        stage.show();
+    }
+
 }

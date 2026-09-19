@@ -1,82 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.geometry.Pos?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+        <?import javafx.geometry.Insets?>
+        <?import javafx.geometry.Pos?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.PasswordField?>
+        <?import javafx.scene.control.TextField?>
+        <?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.layout.VBox?>
+        <?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.projectmvc.controller.LoginController"
-            minWidth="400.0"
-            minHeight="300.0"
-            prefWidth="600.0"
-            prefHeight="400.0">
+            minWidth="600.0"
+            minHeight="500.0"
+            prefWidth="900.0"
+            prefHeight="600.0"
+            style="-fx-background-color: #F5EFE6;">
 
     <children>
 
         <VBox alignment="CENTER"
-              spacing="12.0"
-              AnchorPane.topAnchor="0.0"
-              AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0">
+              spacing="14.0"
+              prefWidth="390.0"
+              prefHeight="500.0"
+              AnchorPane.leftAnchor="255.0"
+              AnchorPane.rightAnchor="255.0"
+              AnchorPane.topAnchor="50.0"
+              AnchorPane.bottomAnchor="50.0"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 20;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 20, 0, 0, 5);">
 
             <padding>
-                <Insets top="25.0"
-                        right="30.0"
-                        bottom="25.0"
-                        left="30.0"/>
+                <Insets top="40.0"
+                        right="50.0"
+                        bottom="40.0"
+                        left="50.0"/>
             </padding>
 
             <!-- Title -->
             <Label text="CoffeeFlow ☕"
-                   textFill="#2f05d7">
+                   textFill="#6F4E37">
 
                 <font>
-                    <Font name="System Bold" size="24.0"/>
+                    <Font name="System Bold"
+                          size="30.0"/>
                 </font>
 
             </Label>
 
             <!-- Subtitle -->
-            <Label text="Coffee Shop Management System">
+            <Label text="Coffee Shop Management System"
+                   textFill="#777777">
 
                 <font>
-                    <Font size="18.0"/>
+                    <Font size="14.0"/>
+                </font>
+
+            </Label>
+
+            <!-- Welcome -->
+            <Label text="Welcome Back!"
+                   textFill="#333333">
+
+                <font>
+                    <Font name="System Bold"
+                          size="21.0"/>
+                </font>
+
+            </Label>
+
+            <Label text="Login to continue"
+                   textFill="#888888">
+
+                <font>
+                    <Font size="13.0"/>
                 </font>
 
             </Label>
 
             <!-- Username -->
-            <Label text="Username"/>
-
             <TextField fx:id="usernameField"
-                       promptText="Enter Username"
-                       maxWidth="270.0"
-                       prefWidth="270.0"/>
+                       promptText="Username"
+                       maxWidth="290.0"
+                       prefWidth="290.0"
+                       prefHeight="42.0"
+                       style="-fx-background-radius: 10;
+                              -fx-border-radius: 10;
+                              -fx-border-color: #D6C2B3;
+                              -fx-padding: 0 12;
+                              -fx-font-size: 14px;"/>
 
             <!-- Password -->
-            <Label text="Password"/>
-
             <PasswordField fx:id="passwordField"
-                           promptText="Enter Password"
-                           maxWidth="270.0"
-                           prefWidth="270.0"/>
+                           promptText="Password"
+                           maxWidth="290.0"
+                           prefWidth="290.0"
+                           prefHeight="42.0"
+                           style="-fx-background-radius: 10;
+                                  -fx-border-radius: 10;
+                                  -fx-border-color: #D6C2B3;
+                                  -fx-padding: 0 12;
+                                  -fx-font-size: 14px;"/>
 
             <!-- Login Button -->
             <Button fx:id="loginButton"
                     text="Login"
                     mnemonicParsing="false"
                     onAction="#handleLogin"
-                    maxWidth="270.0"
-                    prefWidth="270.0"
-                    prefHeight="30.0"/>
+                    maxWidth="290.0"
+                    prefWidth="290.0"
+                    prefHeight="44.0"
+                    style="-fx-background-color: #6F4E37;
+                           -fx-text-fill: white;
+                           -fx-font-size: 15px;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 10;
+                           -fx-cursor: hand;"/>
+
+            <!-- Register text -->
+            <Label text="Don't have an account?"
+                   textFill="#777777">
+
+                <font>
+                    <Font size="13.0"/>
+                </font>
+
+            </Label>
+
+            <!-- Register Button -->
+            <Button text="Create Account"
+                    mnemonicParsing="false"
+                    onAction="#openRegister"
+                    maxWidth="290.0"
+                    prefWidth="290.0"
+                    prefHeight="40.0"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #6F4E37;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-border-color: #6F4E37;
+                           -fx-border-radius: 10;
+                           -fx-background-radius: 10;
+                           -fx-cursor: hand;"/>
 
         </VBox>
 
