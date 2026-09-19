@@ -116,14 +116,78 @@ public class CoffeeDAO {
             double mediumPrice,
             double largePrice) {
 
+        String deleteSql = """
+            DELETE FROM coffee
+            WHERE name = ?
+            """;
+
+        String insertSql = """
+            INSERT INTO coffee (name, size, price)
+            VALUES (?, ?, ?)
+            """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection()) {
+
+            connection.setAutoCommit(false);
+
+            try (
+                    PreparedStatement deleteStatement =
+                            connection.prepareStatement(deleteSql);
+
+                    PreparedStatement insertStatement =
+                            connection.prepareStatement(insertSql)
+            ) {
+
+                // Delete old coffee
+                deleteStatement.setString(1, oldName);
+                deleteStatement.executeUpdate();
+
+                // Insert Small
+                insertStatement.setString(1, newName);
+                insertStatement.setString(2, "Small");
+                insertStatement.setDouble(3, smallPrice);
+                insertStatement.executeUpdate();
+
+                // Insert Medium
+                insertStatement.setString(1, newName);
+                insertStatement.setString(2, "Medium");
+                insertStatement.setDouble(3, mediumPrice);
+                insertStatement.executeUpdate();
+
+                // Insert Large
+                insertStatement.setString(1, newName);
+                insertStatement.setString(2, "Large");
+                insertStatement.setDouble(3, largePrice);
+                insertStatement.executeUpdate();
+
+                connection.commit();
+
+                System.out.println(
+                        "Coffee updated successfully!"
+                );
+
+            } catch (SQLException e) {
+
+                connection.rollback();
+
+                System.out.println(
+                        "Update error: " + e.getMessage()
+                );
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Database error: " + e.getMessage()
+            );
+        }
+    }
+
+    public void deleteCoffee(String name) {
+
         String sql = """
-            UPDATE coffee
-            SET name = ?,
-                price = CASE
-                    WHEN size = 'Small' THEN ?
-                    WHEN size = 'Medium' THEN ?
-                    WHEN size = 'Large' THEN ?
-                END
+            DELETE FROM coffee
             WHERE name = ?
             """;
 
@@ -132,23 +196,20 @@ public class CoffeeDAO {
              PreparedStatement statement =
                      connection.prepareStatement(sql)) {
 
-            statement.setString(1, newName);
-            statement.setDouble(2, smallPrice);
-            statement.setDouble(3, mediumPrice);
-            statement.setDouble(4, largePrice);
-            statement.setString(5, oldName);
+            statement.setString(1, name);
 
             statement.executeUpdate();
 
             System.out.println(
-                    "Coffee updated successfully!"
+                    "Coffee deleted successfully!"
             );
 
         } catch (SQLException e) {
 
             System.out.println(
-                    "Update error: " + e.getMessage()
+                    "Delete error: " + e.getMessage()
             );
         }
     }
+
 }

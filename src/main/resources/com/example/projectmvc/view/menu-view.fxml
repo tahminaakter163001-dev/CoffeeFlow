@@ -119,6 +119,7 @@
 
                 <Button fx:id="deleteButton"
                         text="Delete"
+                        onAction="#handleDelete"
                         prefWidth="100.0"
                         prefHeight="35.0"/>
 

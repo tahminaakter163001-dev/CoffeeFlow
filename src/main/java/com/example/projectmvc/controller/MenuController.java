@@ -17,6 +17,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class MenuController {
 
@@ -42,6 +44,9 @@ public class MenuController {
     private TableColumn<CoffeeMenuRow, Number> largePriceColumn;
 
     private final CoffeeDAO coffeeDAO = new CoffeeDAO();
+    private ObservableList<CoffeeMenuRow> coffeeList;
+    private FilteredList<CoffeeMenuRow> filteredData;
+
 
     @FXML
     private void initialize() {
@@ -76,13 +81,11 @@ public class MenuController {
 
         coffeeTable.setItems(coffeeList);
     }
-
     private void setupSearch() {
 
-        ObservableList<CoffeeMenuRow> coffeeList =
-                coffeeDAO.getAllCoffeeMenuRows();
+        coffeeList = coffeeDAO.getAllCoffeeMenuRows();
 
-        FilteredList<CoffeeMenuRow> filteredData =
+        filteredData =
                 new FilteredList<>(coffeeList, p -> true);
 
         searchField.textProperty().addListener(
@@ -109,13 +112,11 @@ public class MenuController {
         SortedList<CoffeeMenuRow> sortedData =
                 new SortedList<>(filteredData);
 
-        sortedData.comparatorProperty().bind(
-                coffeeTable.comparatorProperty()
-        );
+        sortedData.comparatorProperty()
+                .bind(coffeeTable.comparatorProperty());
 
         coffeeTable.setItems(sortedData);
     }
-
 
     @FXML
     private void openEditCoffee(ActionEvent event) throws Exception {
@@ -189,4 +190,50 @@ public class MenuController {
         stage.setTitle("CoffeeFlow - Dashboard");
         stage.show();
     }
+
+    @FXML
+    private void handleDelete(ActionEvent event) {
+
+        CoffeeMenuRow selectedCoffee =
+                coffeeTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCoffee == null) {
+            System.out.println("Please select a coffee first.");
+            return;
+        }
+
+        Alert alert = new Alert(
+                Alert.AlertType.CONFIRMATION
+        );
+
+        alert.setTitle("Delete Coffee");
+        alert.setHeaderText("Delete Coffee");
+        alert.setContentText(
+                "Are you sure you want to delete \""
+                        + selectedCoffee.getName()
+                        + "\"?"
+        );
+
+        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+        if (result != ButtonType.OK) {
+            return;
+        }
+
+        String coffeeName = selectedCoffee.getName();
+
+        // Delete from database
+        coffeeDAO.deleteCoffee(coffeeName);
+
+        // Reload data
+        coffeeList.clear();
+        coffeeList.addAll(
+                coffeeDAO.getAllCoffeeMenuRows()
+        );
+
+        coffeeTable.refresh();
+
+        System.out.println("Coffee deleted successfully!");
+    }
+
 }
