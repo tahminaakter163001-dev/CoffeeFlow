@@ -75,8 +75,8 @@
 
             <Button text="Orders"
                     maxWidth="Infinity"
-                    prefHeight="40.0"/>
-
+                    prefHeight="40.0"
+                    onAction="#openOrders"/>
 
             <Button text="Billing"
                     maxWidth="Infinity"

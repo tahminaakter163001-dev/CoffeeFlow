@@ -2,6 +2,10 @@ package com.example.projectmvc.database;
 
 import com.example.projectmvc.model.OrderItem;
 import com.example.projectmvc.model.OrderHistory;
+import com.example.projectmvc.model.AdminOrder;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -138,5 +142,57 @@ public class OrderDAO {
         }
 
         return orderList;
+    }
+    public ObservableList<AdminOrder> getAllOrders() {
+
+        ObservableList<AdminOrder> orders =
+                FXCollections.observableArrayList();
+
+        String sql = """
+            SELECT id,
+                   customer_name,
+                   coffee_name,
+                   size,
+                   quantity,
+                   price,
+                   total,
+                   order_date
+            FROM orders
+            ORDER BY id DESC
+            """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
+             ResultSet resultSet =
+                     statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                AdminOrder order =
+                        new AdminOrder(
+                                resultSet.getInt("id"),
+                                resultSet.getString("customer_name"),
+                                resultSet.getString("coffee_name"),
+                                resultSet.getString("size"),
+                                resultSet.getInt("quantity"),
+                                resultSet.getDouble("price"),
+                                resultSet.getDouble("total"),
+                                resultSet.getString("order_date")
+                        );
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Error loading all orders: "
+                            + e.getMessage()
+            );
+        }
+
+        return orders;
     }
 }

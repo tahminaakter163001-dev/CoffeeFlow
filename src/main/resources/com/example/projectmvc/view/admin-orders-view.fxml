@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.TableColumn?>
+        <?import javafx.scene.control.TableView?>
+        <?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="600.0"
+            prefWidth="1000.0"
+            style="-fx-background-color: #F5EFE6;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.projectmvc.controller.AdminOrdersController">
+
+    <VBox spacing="20.0"
+          AnchorPane.topAnchor="30.0"
+          AnchorPane.bottomAnchor="30.0"
+          AnchorPane.leftAnchor="40.0"
+          AnchorPane.rightAnchor="40.0">
+
+        <HBox alignment="CENTER_LEFT"
+              spacing="20.0">
+
+            <Button text="← Back"
+                    prefWidth="90.0"
+                    prefHeight="38.0"
+                    onAction="#goBack"
+                    style="-fx-background-color: #6F4E37;
+                           -fx-text-fill: white;
+                           -fx-background-radius: 8;
+                           -fx-font-weight: bold;
+                           -fx-cursor: hand;"/>
+
+            <Label text="Customer Orders"
+                   style="-fx-font-size: 26px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #6F4E37;"/>
+
+        </HBox>
+
+        <Label text="View all customer orders"
+               style="-fx-font-size: 14px;
+                      -fx-text-fill: #777777;"/>
+
+        <TableView fx:id="ordersTable"
+                   VBox.vgrow="ALWAYS">
+
+            <columns>
+
+                <TableColumn fx:id="idColumn"
+                             text="Order ID"
+                             prefWidth="80.0"/>
+
+                <TableColumn fx:id="customerColumn"
+                             text="Customer"
+                             prefWidth="130.0"/>
+
+                <TableColumn fx:id="coffeeColumn"
+                             text="Coffee"
+                             prefWidth="180.0"/>
+
+                <TableColumn fx:id="sizeColumn"
+                             text="Size"
+                             prefWidth="100.0"/>
+
+                <TableColumn fx:id="quantityColumn"
+                             text="Quantity"
+                             prefWidth="90.0"/>
+
+                <TableColumn fx:id="priceColumn"
+                             text="Price"
+                             prefWidth="100.0"/>
+
+                <TableColumn fx:id="totalColumn"
+                             text="Total"
+                             prefWidth="100.0"/>
+
+                <TableColumn fx:id="dateColumn"
+                             text="Order Date"
+                             prefWidth="180.0"/>
+
+            </columns>
+
+        </TableView>
+
+    </VBox>
+
+</AnchorPane>

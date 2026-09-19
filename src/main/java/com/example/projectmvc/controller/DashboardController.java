@@ -71,5 +71,33 @@ public class DashboardController {
         stage.setTitle("CoffeeFlow - Login");
         stage.show();
     }
+    @FXML
+    private void openOrders(ActionEvent event)
+            throws Exception {
 
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/com/example/projectmvc/view/admin-orders-view.fxml"
+                        )
+                );
+
+        Parent ordersPage =
+                loader.load();
+
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.setScene(
+                new Scene(ordersPage)
+        );
+
+        stage.setTitle(
+                "CoffeeFlow - Orders"
+        );
+
+        stage.show();
+    }
 }
