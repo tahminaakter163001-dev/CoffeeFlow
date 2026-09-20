@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
 
 public class LoginController {
 
@@ -53,49 +54,98 @@ public class LoginController {
             return;
         }
 
-        User user =
-                userDAO.loginUser(
-                        username,
-                        password
+        // Background database task
+        Task<User> loginTask =
+                new Task<>() {
+
+                    @Override
+                    protected User call() {
+
+                        return userDAO.loginUser(
+                                username,
+                                password
+                        );
+                    }
+                };
+
+        // Task completed successfully
+        loginTask.setOnSucceeded(e -> {
+
+            User user =
+                    loginTask.getValue();
+
+            if (user != null) {
+
+                SessionManager.setUsername(
+                        user.getUsername()
                 );
 
-        if (user != null) {
+                try {
 
-            SessionManager.setUsername(
-                    user.getUsername()
-            );
+                    if (user.getRole().equals("admin")) {
 
-            if (user.getRole().equals("admin")) {
+                        openPage(
+                                event,
+                                "/com/example/projectmvc/view/dashboard-view.fxml",
+                                "CoffeeFlow - Admin Dashboard"
+                        );
 
-                openPage(
-                        event,
-                        "/com/example/projectmvc/view/dashboard-view.fxml",
-                        "CoffeeFlow - Admin Dashboard"
+                    } else if (
+                            user.getRole().equals("customer")) {
+
+                        openPage(
+                                event,
+                                "/com/example/projectmvc/view/customer-dashboard-view.fxml",
+                                "CoffeeFlow - Customer Dashboard"
+                        );
+                    }
+
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
+                }
+
+            } else {
+
+                Alert alert =
+                        new Alert(
+                                Alert.AlertType.ERROR
+                        );
+
+                alert.setTitle("Login Failed");
+                alert.setHeaderText(null);
+
+                alert.setContentText(
+                        "Invalid username or password."
                 );
 
-            } else if (user.getRole().equals("customer")) {
-
-                openPage(
-                        event,
-                        "/com/example/projectmvc/view/customer-dashboard-view.fxml",
-                        "CoffeeFlow - Customer Dashboard"
-                );
+                alert.showAndWait();
             }
+        });
 
-        } else {
+        // Task failed unexpectedly
+        loginTask.setOnFailed(e -> {
 
             Alert alert =
                     new Alert(Alert.AlertType.ERROR);
 
-            alert.setTitle("Login Failed");
+            alert.setTitle("Login Error");
             alert.setHeaderText(null);
 
             alert.setContentText(
-                    "Invalid username or password."
+                    "An error occurred while logging in."
             );
 
             alert.showAndWait();
-        }
+        });
+
+        // Start background thread
+        Thread loginThread =
+                new Thread(loginTask);
+
+        loginThread.setDaemon(true);
+
+        loginThread.start();
     }
 
     private void openPage(
