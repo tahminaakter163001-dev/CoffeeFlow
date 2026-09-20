@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
 
 public class AdminOrdersController {
 
@@ -87,10 +88,41 @@ public class AdminOrdersController {
 
     private void loadOrders() {
 
-        ObservableList<AdminOrder> orders =
-                orderDAO.getAllOrders();
+        // Background database task
+        Task<ObservableList<AdminOrder>> orderTask =
+                new Task<>() {
 
-        ordersTable.setItems(orders);
+                    @Override
+                    protected ObservableList<AdminOrder> call() {
+
+                        return orderDAO.getAllOrders();
+                    }
+                };
+
+        // Task completed successfully
+        orderTask.setOnSucceeded(e -> {
+
+            ObservableList<AdminOrder> orders =
+                    orderTask.getValue();
+
+            ordersTable.setItems(orders);
+        });
+
+        // Task failed unexpectedly
+        orderTask.setOnFailed(e -> {
+
+            System.out.println(
+                    "An error occurred while loading orders."
+            );
+        });
+
+        // Start background thread
+        Thread orderThread =
+                new Thread(orderTask);
+
+        orderThread.setDaemon(true);
+
+        orderThread.start();
     }
 
     @FXML
