@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.concurrent.Task;
-
 public class MenuController {
 
     @FXML
@@ -72,19 +71,63 @@ public class MenuController {
                 cellData -> cellData.getValue().largePriceProperty()
         );
 
-        setupSearch();
+        loadCoffeeData();
     }
 
     private void loadCoffeeData() {
 
-        ObservableList<CoffeeMenuRow> coffeeList =
-                coffeeDAO.getAllCoffeeMenuRows();
+        Task<ObservableList<CoffeeMenuRow>> coffeeTask =
+                new Task<>() {
 
-        coffeeTable.setItems(coffeeList);
+                    @Override
+                    protected ObservableList<CoffeeMenuRow> call() {
+
+                        return coffeeDAO
+                                .getAllCoffeeMenuRows();
+                    }
+                };
+
+        coffeeTask.setOnSucceeded(e -> {
+
+            coffeeList =
+                    coffeeTask.getValue();
+
+            filteredData =
+                    new FilteredList<>(
+                            coffeeList,
+                            p -> true
+                    );
+
+            SortedList<CoffeeMenuRow> sortedData =
+                    new SortedList<>(filteredData);
+
+            sortedData.comparatorProperty()
+                    .bind(
+                            coffeeTable.comparatorProperty()
+                    );
+
+            coffeeTable.setItems(sortedData);
+
+            setupSearch();
+        });
+
+        coffeeTask.setOnFailed(e -> {
+
+            System.out.println(
+                    "An error occurred while loading coffee."
+            );
+        });
+
+        Thread coffeeThread =
+                new Thread(coffeeTask);
+
+        coffeeThread.setDaemon(true);
+
+        coffeeThread.start();
     }
+
     private void setupSearch() {
 
-        coffeeList = coffeeDAO.getAllCoffeeMenuRows();
 
         filteredData =
                 new FilteredList<>(coffeeList, p -> true);
