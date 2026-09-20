@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.Alert;
 
 public class AdminOrdersController {
 
@@ -66,7 +67,8 @@ public class AdminOrdersController {
                 "Pending",
                 "Preparing",
                 "Ready",
-                "Completed"
+                "Completed",
+                "Cancelled"
         );
 
         idColumn.setCellValueFactory(
@@ -252,6 +254,27 @@ public class AdminOrdersController {
             System.out.println(
                     "Please select a status."
             );
+
+            return;
+        }
+
+        String currentStatus =
+                selectedOrder.getStatus();
+
+        if (currentStatus.equals("Completed")
+                || currentStatus.equals("Cancelled")) {
+
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING);
+
+            alert.setTitle("Status Update");
+            alert.setHeaderText(null);
+
+            alert.setContentText(
+                    "This order can no longer be updated."
+            );
+
+            alert.showAndWait();
 
             return;
         }
