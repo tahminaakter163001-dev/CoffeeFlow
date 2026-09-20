@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
 
 public class MyOrdersController {
 
@@ -79,12 +80,46 @@ public class MyOrdersController {
 
     private void loadOrders() {
 
-        ObservableList<OrderHistory> orders =
-                orderDAO.getCustomerOrders(
-                        SessionManager.getUsername()
-                );
+        String username =
+                SessionManager.getUsername();
 
-        ordersTable.setItems(orders);
+        // Background database task
+        Task<ObservableList<OrderHistory>> orderTask =
+                new Task<>() {
+
+                    @Override
+                    protected ObservableList<OrderHistory> call() {
+
+                        return orderDAO.getCustomerOrders(
+                                username
+                        );
+                    }
+                };
+
+        // Task completed successfully
+        orderTask.setOnSucceeded(e -> {
+
+            ObservableList<OrderHistory> orders =
+                    orderTask.getValue();
+
+            ordersTable.setItems(orders);
+        });
+
+        // Task failed unexpectedly
+        orderTask.setOnFailed(e -> {
+
+            System.out.println(
+                    "An error occurred while loading orders."
+            );
+        });
+
+        // Start background thread
+        Thread orderThread =
+                new Thread(orderTask);
+
+        orderThread.setDaemon(true);
+
+        orderThread.start();
     }
 
     @FXML
