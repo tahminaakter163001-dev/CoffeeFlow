@@ -45,11 +45,28 @@ public class AdminOrdersController {
     @FXML
     private TableColumn<AdminOrder, String> dateColumn;
 
+    @FXML
+    private TableColumn<AdminOrder, String> statusColumn;
+
+    @FXML
+    private javafx.scene.control.ComboBox<String> statusComboBox;
+
+    @FXML
+    private javafx.scene.control.Button updateStatusButton;
+
+
     private final OrderDAO orderDAO =
             new OrderDAO();
 
     @FXML
     public void initialize() {
+
+        statusComboBox.getItems().addAll(
+                "Pending",
+                "Preparing",
+                "Ready",
+                "Completed"
+        );
 
         idColumn.setCellValueFactory(
                 data -> data.getValue().idProperty()
@@ -82,6 +99,27 @@ public class AdminOrdersController {
         dateColumn.setCellValueFactory(
                 data -> data.getValue().orderDateProperty()
         );
+
+        statusColumn.setCellValueFactory(
+                data -> data.getValue().statusProperty()
+        );
+        ordersTable.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, oldOrder, newOrder) -> {
+
+                            if (newOrder != null) {
+
+                                statusComboBox.setValue(
+                                        newOrder.getStatus()
+                                );
+
+                            } else {
+
+                                statusComboBox.setValue(null);
+                            }
+                        }
+                );
 
         loadOrders();
     }
@@ -123,6 +161,98 @@ public class AdminOrdersController {
         orderThread.setDaemon(true);
 
         orderThread.start();
+    }
+
+    @FXML
+    private void handleUpdateStatus() {
+
+        AdminOrder selectedOrder =
+                ordersTable.getSelectionModel()
+                        .getSelectedItem();
+
+        if (selectedOrder == null) {
+
+            System.out.println(
+                    "Please select an order first."
+            );
+
+            return;
+        }
+
+        String newStatus =
+                statusComboBox.getValue();
+
+        if (newStatus == null) {
+
+            System.out.println(
+                    "Please select a status."
+            );
+
+            return;
+        }
+
+        int orderId =
+                selectedOrder.getId();
+
+        updateStatusButton.setDisable(true);
+
+        Task<Boolean> statusTask =
+                new Task<>() {
+
+                    @Override
+                    protected Boolean call() {
+
+                        return orderDAO.updateOrderStatus(
+                                orderId,
+                                newStatus
+                        );
+                    }
+                };
+
+        statusTask.setOnSucceeded(e -> {
+
+            updateStatusButton.setDisable(false);
+
+            boolean success =
+                    statusTask.getValue();
+
+            if (success) {
+
+                selectedOrder
+                        .statusProperty()
+                        .set(newStatus);
+
+                statusComboBox.setValue(null);
+
+                ordersTable.refresh();
+
+                System.out.println(
+                        "Order status updated successfully!"
+                );
+
+            } else {
+
+                System.out.println(
+                        "Failed to update order status."
+                );
+            }
+        });
+
+        statusTask.setOnFailed(e -> {
+
+            updateStatusButton.setDisable(false);
+
+            System.out.println(
+                    "An error occurred while updating order status."
+            );
+        });
+
+        Thread statusThread =
+                new Thread(statusTask);
+
+        statusThread.setDaemon(true);
+
+        statusThread.start();
     }
 
     @FXML

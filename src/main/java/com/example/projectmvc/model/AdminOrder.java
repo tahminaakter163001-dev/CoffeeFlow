@@ -12,6 +12,7 @@ public class AdminOrder {
     private final DoubleProperty price;
     private final DoubleProperty total;
     private final StringProperty orderDate;
+    private final StringProperty status;
 
     public AdminOrder(
             int id,
@@ -21,7 +22,8 @@ public class AdminOrder {
             int quantity,
             double price,
             double total,
-            String orderDate) {
+            String orderDate,
+            String status) {
 
         this.id =
                 new SimpleIntegerProperty(id);
@@ -46,6 +48,9 @@ public class AdminOrder {
 
         this.orderDate =
                 new SimpleStringProperty(orderDate);
+
+        this.status =
+                new SimpleStringProperty(status);
     }
 
     public int getId() {
@@ -111,5 +116,12 @@ public class AdminOrder {
     public StringProperty orderDateProperty() {
         return orderDate;
     }
-}
 
+    public String getStatus() {
+        return status.get();
+    }
+
+    public StringProperty statusProperty() {
+        return status;
+    }
+}

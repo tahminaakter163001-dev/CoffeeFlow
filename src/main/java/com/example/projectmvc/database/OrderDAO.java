@@ -143,6 +143,7 @@ public class OrderDAO {
 
         return orderList;
     }
+
     public ObservableList<AdminOrder> getAllOrders() {
 
         ObservableList<AdminOrder> orders =
@@ -156,7 +157,8 @@ public class OrderDAO {
                    quantity,
                    price,
                    total,
-                   order_date
+                   order_date,
+                   status
             FROM orders
             ORDER BY id DESC
             """;
@@ -179,7 +181,8 @@ public class OrderDAO {
                                 resultSet.getInt("quantity"),
                                 resultSet.getDouble("price"),
                                 resultSet.getDouble("total"),
-                                resultSet.getString("order_date")
+                                resultSet.getString("order_date"),
+                                resultSet.getString("status")
                         );
 
                 orders.add(order);
@@ -194,5 +197,46 @@ public class OrderDAO {
         }
 
         return orders;
+    }
+
+    public boolean updateOrderStatus(
+            int orderId,
+            String status) {
+
+        String sql = """
+            UPDATE orders
+            SET status = ?
+            WHERE id = ?
+            """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+            statement.setInt(2, orderId);
+
+            int rowsUpdated =
+                    statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+
+                System.out.println(
+                        "Order status updated successfully!"
+                );
+
+                return true;
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Status update error: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
     }
 }

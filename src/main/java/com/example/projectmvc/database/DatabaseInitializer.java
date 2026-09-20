@@ -17,18 +17,20 @@ public class DatabaseInitializer {
                 );
                 """;
 
-        String ordersTable = """
-                CREATE TABLE IF NOT EXISTS orders (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    customer_name TEXT NOT NULL,
-                    coffee_name TEXT NOT NULL,
-                    size TEXT NOT NULL,
-                    quantity INTEGER NOT NULL,
-                    price REAL NOT NULL,
-                    total REAL NOT NULL,
-                    order_date TEXT NOT NULL
-                );
-                """;
+        String createOrdersTable = """
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT NOT NULL,
+            coffee_name TEXT NOT NULL,
+            size TEXT NOT NULL,
+            quantity INTEGER NOT NULL,
+            price REAL NOT NULL,
+            total REAL NOT NULL,
+            order_date TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'Pending'
+        );
+        """;
+
         String usersTable = """
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,7 +56,22 @@ public class DatabaseInitializer {
                      connection.createStatement()) {
 
             statement.execute(coffeeTable);
-            statement.execute(ordersTable);
+            statement.execute(createOrdersTable);
+            try {
+                statement.execute(
+                        "ALTER TABLE orders ADD COLUMN status " +
+                                "TEXT NOT NULL DEFAULT 'Pending'"
+                );
+
+                System.out.println(
+                        "Order status column added successfully!"
+                );
+
+            } catch (SQLException e) {
+
+                // Column already exists, so no action is needed.
+            }
+
             statement.execute(usersTable);
 
             statement.execute(adminUser);
