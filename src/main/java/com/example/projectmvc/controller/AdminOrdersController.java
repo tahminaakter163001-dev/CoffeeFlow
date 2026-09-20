@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
+import javafx.scene.control.TableCell;
 
 public class AdminOrdersController {
 
@@ -103,6 +104,70 @@ public class AdminOrdersController {
         statusColumn.setCellValueFactory(
                 data -> data.getValue().statusProperty()
         );
+        statusColumn.setCellFactory(column -> {
+
+            return new TableCell<AdminOrder, String>() {
+
+                @Override
+                protected void updateItem(
+                        String status,
+                        boolean empty) {
+
+                    super.updateItem(status, empty);
+
+                    if (empty || status == null) {
+
+                        setText(null);
+                        setStyle("");
+
+                    } else {
+
+                        setText(status);
+
+                        switch (status) {
+
+                            case "Cancelled":
+                                setStyle(
+                                        "-fx-text-fill: red;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Completed":
+                                setStyle(
+                                        "-fx-text-fill: green;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Pending":
+                                setStyle(
+                                        "-fx-text-fill: orange;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Preparing":
+                                setStyle(
+                                        "-fx-text-fill: blue;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Ready":
+                                setStyle(
+                                        "-fx-text-fill: purple;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            default:
+                                setStyle("");
+                        }
+                    }
+                }
+            };
+        });
         ordersTable.getSelectionModel()
                 .selectedItemProperty()
                 .addListener(

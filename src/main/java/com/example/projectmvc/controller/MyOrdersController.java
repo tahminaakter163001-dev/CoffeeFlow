@@ -15,6 +15,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
 
 public class MyOrdersController {
 
@@ -81,6 +84,70 @@ public class MyOrdersController {
         statusColumn.setCellValueFactory(
                 data -> data.getValue().statusProperty()
         );
+        statusColumn.setCellFactory(column -> {
+
+            return new TableCell<OrderHistory, String>() {
+
+                @Override
+                protected void updateItem(
+                        String status,
+                        boolean empty) {
+
+                    super.updateItem(status, empty);
+
+                    if (empty || status == null) {
+
+                        setText(null);
+                        setStyle("");
+
+                    } else {
+
+                        setText(status);
+
+                        switch (status) {
+
+                            case "Cancelled":
+                                setStyle(
+                                        "-fx-text-fill: red;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Completed":
+                                setStyle(
+                                        "-fx-text-fill: green;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Pending":
+                                setStyle(
+                                        "-fx-text-fill: orange;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Preparing":
+                                setStyle(
+                                        "-fx-text-fill: blue;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            case "Ready":
+                                setStyle(
+                                        "-fx-text-fill: purple;" +
+                                                "-fx-font-weight: bold;"
+                                );
+                                break;
+
+                            default:
+                                setStyle("");
+                        }
+                    }
+                }
+            };
+        });
 
         loadOrders();
     }
@@ -127,6 +194,145 @@ public class MyOrdersController {
         orderThread.setDaemon(true);
 
         orderThread.start();
+    }
+
+    @FXML
+    private void handleCancelOrder() {
+
+        OrderHistory selectedOrder =
+                ordersTable.getSelectionModel()
+                        .getSelectedItem();
+
+        if (selectedOrder == null) {
+
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING);
+
+            alert.setTitle("Cancel Order");
+            alert.setHeaderText(null);
+            alert.setContentText(
+                    "Please select an order first."
+            );
+
+            alert.showAndWait();
+
+            return;
+        }
+
+        String currentStatus =
+                selectedOrder.getStatus();
+
+        if (!currentStatus.equals("Pending")) {
+
+            Alert alert =
+                    new Alert(Alert.AlertType.WARNING);
+
+            alert.setTitle("Cancel Order");
+            alert.setHeaderText(null);
+            alert.setContentText(
+                    "Only Pending orders can be cancelled."
+            );
+
+            alert.showAndWait();
+
+            return;
+        }
+
+        Alert confirmation =
+                new Alert(Alert.AlertType.CONFIRMATION);
+
+        confirmation.setTitle("Cancel Order");
+        confirmation.setHeaderText("Cancel Order");
+
+        confirmation.setContentText(
+                "Are you sure you want to cancel Order ID "
+                        + selectedOrder.getId()
+                        + "?"
+        );
+
+        ButtonType result =
+                confirmation.showAndWait()
+                        .orElse(ButtonType.CANCEL);
+
+        if (result != ButtonType.OK) {
+            return;
+        }
+
+        int orderId =
+                selectedOrder.getId();
+
+        Task<Boolean> cancelTask =
+                new Task<>() {
+
+                    @Override
+                    protected Boolean call() {
+
+                        return orderDAO.updateOrderStatus(
+                                orderId,
+                                "Cancelled"
+                        );
+                    }
+                };
+
+        cancelTask.setOnSucceeded(e -> {
+
+            boolean success =
+                    cancelTask.getValue();
+
+            if (success) {
+
+                selectedOrder
+                        .statusProperty()
+                        .set("Cancelled");
+
+                ordersTable.refresh();
+
+                Alert alert =
+                        new Alert(Alert.AlertType.INFORMATION);
+
+                alert.setTitle("Order Cancelled");
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        "Order cancelled successfully."
+                );
+
+                alert.showAndWait();
+
+            } else {
+
+                Alert alert =
+                        new Alert(Alert.AlertType.ERROR);
+
+                alert.setTitle("Cancel Order");
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        "Failed to cancel the order."
+                );
+
+                alert.showAndWait();
+            }
+        });
+
+        cancelTask.setOnFailed(e -> {
+
+            Alert alert =
+                    new Alert(Alert.AlertType.ERROR);
+
+            alert.setTitle("Cancel Order");
+            alert.setHeaderText(null);
+            alert.setContentText(
+                    "An error occurred while cancelling the order."
+            );
+
+            alert.showAndWait();
+        });
+
+        Thread cancelThread =
+                new Thread(cancelTask);
+
+        cancelThread.setDaemon(true);
+
+        cancelThread.start();
     }
 
     @FXML
