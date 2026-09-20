@@ -52,58 +52,124 @@ public class EditCoffeeController {
     private void handleUpdate(ActionEvent event) {
 
         if (selectedCoffee == null) {
-            messageLabel.setText("No coffee selected.");
+
+            messageLabel.setText(
+                    "No coffee selected."
+            );
+
             return;
         }
 
-        String oldName = selectedCoffee.getName();
-        String newName = nameField.getText().trim();
+        String oldName =
+                selectedCoffee.getName();
+
+        String newName =
+                nameField.getText().trim();
 
         if (newName.isEmpty()) {
-            messageLabel.setText("Coffee name cannot be empty.");
+
+            messageLabel.setText(
+                    "Coffee name cannot be empty."
+            );
+
             return;
         }
+
+        double smallPrice;
+        double mediumPrice;
+        double largePrice;
 
         try {
 
-            double smallPrice =
-                    Double.parseDouble(smallPriceField.getText().trim());
+            smallPrice =
+                    Double.parseDouble(
+                            smallPriceField.getText().trim()
+                    );
 
-            double mediumPrice =
-                    Double.parseDouble(mediumPriceField.getText().trim());
+            mediumPrice =
+                    Double.parseDouble(
+                            mediumPriceField.getText().trim()
+                    );
 
-            double largePrice =
-                    Double.parseDouble(largePriceField.getText().trim());
-
-            if (smallPrice < 0 ||
-                    mediumPrice < 0 ||
-                    largePrice < 0) {
-
-                messageLabel.setText(
-                        "Prices cannot be negative."
-                );
-
-                return;
-            }
-
-            coffeeDAO.updateCoffee(
-                    oldName,
-                    newName,
-                    smallPrice,
-                    mediumPrice,
-                    largePrice
-            );
-
-            messageLabel.setText(
-                    "Coffee updated successfully!"
-            );
+            largePrice =
+                    Double.parseDouble(
+                            largePriceField.getText().trim()
+                    );
 
         } catch (NumberFormatException e) {
 
             messageLabel.setText(
                     "Please enter valid prices."
             );
+
+            return;
         }
+
+        if (smallPrice < 0 ||
+                mediumPrice < 0 ||
+                largePrice < 0) {
+
+            messageLabel.setText(
+                    "Prices cannot be negative."
+            );
+
+            return;
+        }
+
+        // Background database task
+        javafx.concurrent.Task<Boolean> updateTask =
+                new javafx.concurrent.Task<>() {
+
+                    @Override
+                    protected Boolean call() {
+
+                        return coffeeDAO.updateCoffee(
+                                oldName,
+                                newName,
+                                smallPrice,
+                                mediumPrice,
+                                largePrice
+                        );
+                    }
+                };
+
+        // Task completed successfully
+        updateTask.setOnSucceeded(e -> {
+
+            boolean success =
+                    updateTask.getValue();
+
+            if (success) {
+
+                messageLabel.setText(
+                        "Coffee updated successfully!"
+                );
+
+                selectedCoffee = null;
+
+            } else {
+
+                messageLabel.setText(
+                        "Failed to update coffee."
+                );
+            }
+        });
+
+        // Task failed unexpectedly
+        updateTask.setOnFailed(e -> {
+
+            messageLabel.setText(
+                    "An error occurred while updating coffee."
+            );
+        });
+
+        // Start background thread
+        Thread updateThread =
+                new Thread(updateTask);
+
+        updateThread.setDaemon(true);
+
+        updateThread.start();
     }
 
     @FXML

@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.concurrent.Task;
 
 public class MenuController {
 
@@ -191,14 +192,20 @@ public class MenuController {
         stage.show();
     }
 
+
     @FXML
     private void handleDelete(ActionEvent event) {
 
         CoffeeMenuRow selectedCoffee =
-                coffeeTable.getSelectionModel().getSelectedItem();
+                coffeeTable.getSelectionModel()
+                        .getSelectedItem();
 
         if (selectedCoffee == null) {
-            System.out.println("Please select a coffee first.");
+
+            System.out.println(
+                    "Please select a coffee first."
+            );
+
             return;
         }
 
@@ -208,32 +215,87 @@ public class MenuController {
 
         alert.setTitle("Delete Coffee");
         alert.setHeaderText("Delete Coffee");
+
         alert.setContentText(
                 "Are you sure you want to delete \""
                         + selectedCoffee.getName()
                         + "\"?"
         );
 
-        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+        ButtonType result =
+                alert.showAndWait()
+                        .orElse(ButtonType.CANCEL);
 
         if (result != ButtonType.OK) {
             return;
         }
 
-        String coffeeName = selectedCoffee.getName();
+        String coffeeName =
+                selectedCoffee.getName();
 
-        // Delete from database
-        coffeeDAO.deleteCoffee(coffeeName);
+        // Background delete and reload task
+        Task<ObservableList<CoffeeMenuRow>> deleteTask =
+                new Task<>() {
 
-        // Reload data
-        coffeeList.clear();
-        coffeeList.addAll(
-                coffeeDAO.getAllCoffeeMenuRows()
-        );
+                    @Override
+                    protected ObservableList<CoffeeMenuRow> call() {
 
-        coffeeTable.refresh();
+                        boolean deleted =
+                                coffeeDAO.deleteCoffee(
+                                        coffeeName
+                                );
 
-        System.out.println("Coffee deleted successfully!");
+                        if (!deleted) {
+                            return null;
+                        }
+
+                        return coffeeDAO
+                                .getAllCoffeeMenuRows();
+                    }
+                };
+
+        // Task completed successfully
+        deleteTask.setOnSucceeded(e -> {
+
+            ObservableList<CoffeeMenuRow> updatedList =
+                    deleteTask.getValue();
+
+            if (updatedList != null) {
+
+                coffeeList.clear();
+
+                coffeeList.addAll(
+                        updatedList
+                );
+
+                coffeeTable.refresh();
+
+                System.out.println(
+                        "Coffee deleted successfully!"
+                );
+
+            } else {
+
+                System.out.println(
+                        "Failed to delete coffee."
+                );
+            }
+        });
+
+        // Task failed unexpectedly
+        deleteTask.setOnFailed(e -> {
+
+            System.out.println(
+                    "An error occurred while deleting coffee."
+            );
+        });
+
+        // Start background thread
+        Thread deleteThread =
+                new Thread(deleteTask);
+
+        deleteThread.setDaemon(true);
+
+        deleteThread.start();
     }
-
 }

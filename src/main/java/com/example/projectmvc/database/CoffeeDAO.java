@@ -14,12 +14,13 @@ import javafx.collections.ObservableList;
 public class CoffeeDAO {
 
     // Add coffee to database
-    public void addCoffee(Coffee coffee) {
+    public boolean addCoffee(Coffee coffee) {
 
         String sql = """
+            
                 INSERT INTO coffee (name, size, price)
-                VALUES (?, ?, ?)
-                """;
+            VALUES (?, ?, ?)
+            """;
 
         try (Connection connection =
                      DatabaseConnection.getConnection();
@@ -36,11 +37,15 @@ public class CoffeeDAO {
                     "Coffee added successfully!"
             );
 
+            return true;
+
         } catch (SQLException e) {
 
             System.out.println(
                     "Insert error: " + e.getMessage()
             );
+
+            return false;
         }
     }
 
@@ -109,7 +114,7 @@ public class CoffeeDAO {
         return coffeeList;
     }
 
-    public void updateCoffee(
+    public boolean updateCoffee(
             String oldName,
             String newName,
             double smallPrice,
@@ -167,6 +172,8 @@ public class CoffeeDAO {
                         "Coffee updated successfully!"
                 );
 
+                return true;
+
             } catch (SQLException e) {
 
                 connection.rollback();
@@ -174,6 +181,8 @@ public class CoffeeDAO {
                 System.out.println(
                         "Update error: " + e.getMessage()
                 );
+
+                return false;
             }
 
         } catch (SQLException e) {
@@ -181,10 +190,12 @@ public class CoffeeDAO {
             System.out.println(
                     "Database error: " + e.getMessage()
             );
+
+            return false;
         }
     }
 
-    public void deleteCoffee(String name) {
+    public boolean deleteCoffee(String name) {
 
         String sql = """
             DELETE FROM coffee
@@ -204,11 +215,15 @@ public class CoffeeDAO {
                     "Coffee deleted successfully!"
             );
 
+            return true;
+
         } catch (SQLException e) {
 
             System.out.println(
                     "Delete error: " + e.getMessage()
             );
+
+            return false;
         }
     }
 
