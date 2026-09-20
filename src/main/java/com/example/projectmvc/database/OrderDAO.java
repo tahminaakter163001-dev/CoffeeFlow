@@ -241,4 +241,38 @@ public class OrderDAO {
 
         return false;
     }
+    public int getOrderCountByStatus(String status) {
+
+        String sql = """
+            SELECT COUNT(*)
+            FROM orders
+            WHERE status = ?
+            """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+
+            try (ResultSet resultSet =
+                         statement.executeQuery()) {
+
+                if (resultSet.next()) {
+
+                    return resultSet.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Order count error: "
+                            + e.getMessage()
+            );
+        }
+
+        return 0;
+    }
 }

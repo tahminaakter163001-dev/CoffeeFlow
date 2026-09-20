@@ -94,19 +94,20 @@
     <!-- Main Content -->
     <center>
         <VBox alignment="CENTER"
-              spacing="25.0">
+              spacing="22.0">
 
             <padding>
-                <Insets top="30.0"
-                        right="30.0"
-                        bottom="30.0"
-                        left="30.0"/>
+                <Insets top="25.0"
+                        right="25.0"
+                        bottom="25.0"
+                        left="25.0"/>
             </padding>
 
             <Label text="Welcome to CoffeeFlow">
 
                 <font>
-                    <Font name="System Bold" size="30.0"/>
+                    <Font name="System Bold"
+                          size="30.0"/>
                 </font>
 
             </Label>
@@ -120,78 +121,96 @@
 
             </Label>
 
+            <!-- Order Summary -->
+            <Label text="Order Status Summary">
+
+                <font>
+                    <Font name="System Bold"
+                          size="20.0"/>
+                </font>
+
+            </Label>
+
             <HBox alignment="CENTER"
-                  spacing="20.0">
+                  spacing="10.0">
 
                 <VBox alignment="CENTER"
-                      spacing="8.0"
-                      prefWidth="180.0"
-                      prefHeight="120.0"
-                      style="-fx-background-color: #F5E6D3;">
+                      spacing="5.0"
+                      prefWidth="105.0"
+                      prefHeight="75.0"
+                      style="-fx-background-color: #FFF3CD;">
 
-                    <Label text="☕">
+                    <Label text="Pending"
+                           style="-fx-font-weight: bold;"/>
 
-                        <font>
-                            <Font size="30.0"/>
-                        </font>
-
-                    </Label>
-
-                    <Label text="Coffee Menu">
-
-                        <font>
-                            <Font name="System Bold" size="16.0"/>
-                        </font>
-
-                    </Label>
+                    <Label fx:id="pendingCount"
+                           text="0"
+                           style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;"/>
 
                 </VBox>
 
                 <VBox alignment="CENTER"
-                      spacing="8.0"
-                      prefWidth="180.0"
-                      prefHeight="120.0"
-                      style="-fx-background-color: #F5E6D3;">
+                      spacing="5.0"
+                      prefWidth="105.0"
+                      prefHeight="75.0"
+                      style="-fx-background-color: #DCEBFF;">
 
-                    <Label text="🛒">
+                    <Label text="Preparing"
+                           style="-fx-font-weight: bold;"/>
 
-                        <font>
-                            <Font size="30.0"/>
-                        </font>
-
-                    </Label>
-
-                    <Label text="Orders">
-
-                        <font>
-                            <Font name="System Bold" size="16.0"/>
-                        </font>
-
-                    </Label>
+                    <Label fx:id="preparingCount"
+                           text="0"
+                           style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;"/>
 
                 </VBox>
 
                 <VBox alignment="CENTER"
-                      spacing="8.0"
-                      prefWidth="180.0"
-                      prefHeight="120.0"
-                      style="-fx-background-color: #F5E6D3;">
+                      spacing="5.0"
+                      prefWidth="105.0"
+                      prefHeight="75.0"
+                      style="-fx-background-color: #E8DDF5;">
 
-                    <Label text="💰">
+                    <Label text="Ready"
+                           style="-fx-font-weight: bold;"/>
 
-                        <font>
-                            <Font size="30.0"/>
-                        </font>
+                    <Label fx:id="readyCount"
+                           text="0"
+                           style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;"/>
 
-                    </Label>
+                </VBox>
 
-                    <Label text="Billing">
+                <VBox alignment="CENTER"
+                      spacing="5.0"
+                      prefWidth="105.0"
+                      prefHeight="75.0"
+                      style="-fx-background-color: #DFF2E1;">
 
-                        <font>
-                            <Font name="System Bold" size="16.0"/>
-                        </font>
+                    <Label text="Completed"
+                           style="-fx-font-weight: bold;"/>
 
-                    </Label>
+                    <Label fx:id="completedCount"
+                           text="0"
+                           style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;"/>
+
+                </VBox>
+
+                <VBox alignment="CENTER"
+                      spacing="5.0"
+                      prefWidth="105.0"
+                      prefHeight="75.0"
+                      style="-fx-background-color: #F8D7DA;">
+
+                    <Label text="Cancelled"
+                           style="-fx-font-weight: bold;"/>
+
+                    <Label fx:id="cancelledCount"
+                           text="0"
+                           style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;"/>
 
                 </VBox>
 
