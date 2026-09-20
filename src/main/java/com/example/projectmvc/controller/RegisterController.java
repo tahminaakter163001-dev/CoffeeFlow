@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.concurrent.Task;
 
 public class RegisterController {
 
@@ -42,6 +43,7 @@ public class RegisterController {
         String confirmPassword =
                 confirmPasswordField.getText();
 
+        // Validation
         if (username.isEmpty()
                 || password.isEmpty()
                 || confirmPassword.isEmpty()) {
@@ -62,15 +64,6 @@ public class RegisterController {
             return;
         }
 
-        if (userDAO.usernameExists(username)) {
-
-            messageLabel.setText(
-                    "Username already exists."
-            );
-
-            return;
-        }
-
         User user =
                 new User(
                         username,
@@ -78,25 +71,63 @@ public class RegisterController {
                         "customer"
                 );
 
-        boolean registered =
-                userDAO.registerUser(user);
+        // Background database task
+        Task<Boolean> registerTask =
+                new Task<>() {
 
-        if (registered) {
+                    @Override
+                    protected Boolean call() {
+
+                        // Check username in database
+                        if (userDAO.usernameExists(username)) {
+
+                            return false;
+                        }
+
+                        // Insert new user
+                        return userDAO.registerUser(user);
+                    }
+                };
+
+        // Task completed successfully
+        registerTask.setOnSucceeded(e -> {
+
+            boolean registered =
+                    registerTask.getValue();
+
+            if (registered) {
+
+                messageLabel.setText(
+                        "Account created successfully!"
+                );
+
+                usernameField.clear();
+                passwordField.clear();
+                confirmPasswordField.clear();
+
+            } else {
+
+                messageLabel.setText(
+                        "Username already exists or registration failed."
+                );
+            }
+        });
+
+        // Task failed unexpectedly
+        registerTask.setOnFailed(e -> {
 
             messageLabel.setText(
-                    "Account created successfully!"
+                    "An error occurred during registration."
             );
+        });
 
-            usernameField.clear();
-            passwordField.clear();
-            confirmPasswordField.clear();
+        // Start background thread
+        Thread registerThread =
+                new Thread(registerTask);
 
-        } else {
+        registerThread.setDaemon(true);
 
-            messageLabel.setText(
-                    "Registration failed."
-            );
-        }
+        registerThread.start();
     }
 
     @FXML
