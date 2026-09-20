@@ -11,6 +11,7 @@ public class OrderHistory {
     private final DoubleProperty price;
     private final DoubleProperty total;
     private final StringProperty orderDate;
+    private final StringProperty status;
 
     public OrderHistory(
             int id,
@@ -19,15 +20,32 @@ public class OrderHistory {
             int quantity,
             double price,
             double total,
-            String orderDate) {
+            String orderDate,
+            String status) {
 
-        this.id = new SimpleIntegerProperty(id);
-        this.coffeeName = new SimpleStringProperty(coffeeName);
-        this.size = new SimpleStringProperty(size);
-        this.quantity = new SimpleIntegerProperty(quantity);
-        this.price = new SimpleDoubleProperty(price);
-        this.total = new SimpleDoubleProperty(total);
-        this.orderDate = new SimpleStringProperty(orderDate);
+        this.id =
+                new SimpleIntegerProperty(id);
+
+        this.coffeeName =
+                new SimpleStringProperty(coffeeName);
+
+        this.size =
+                new SimpleStringProperty(size);
+
+        this.quantity =
+                new SimpleIntegerProperty(quantity);
+
+        this.price =
+                new SimpleDoubleProperty(price);
+
+        this.total =
+                new SimpleDoubleProperty(total);
+
+        this.orderDate =
+                new SimpleStringProperty(orderDate);
+
+        this.status =
+                new SimpleStringProperty(status);
     }
 
     public int getId() {
@@ -84,5 +102,13 @@ public class OrderHistory {
 
     public StringProperty orderDateProperty() {
         return orderDate;
+    }
+
+    public String getStatus() {
+        return status.get();
+    }
+
+    public StringProperty statusProperty() {
+        return status;
     }
 }

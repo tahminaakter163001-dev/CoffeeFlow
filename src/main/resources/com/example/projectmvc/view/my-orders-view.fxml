@@ -72,6 +72,10 @@
                              text="Order Date"
                              prefWidth="170.0"/>
 
+                <TableColumn fx:id="statusColumn"
+                             text="Status"
+                             prefWidth="120.0"/>
+
             </columns>
 
         </TableView>

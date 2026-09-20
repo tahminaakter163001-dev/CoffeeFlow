@@ -42,6 +42,9 @@ public class MyOrdersController {
     @FXML
     private TableColumn<OrderHistory, String> dateColumn;
 
+    @FXML
+    private TableColumn<OrderHistory, String> statusColumn;
+
     private final OrderDAO orderDAO = new OrderDAO();
 
     @FXML
@@ -73,6 +76,10 @@ public class MyOrdersController {
 
         dateColumn.setCellValueFactory(
                 data -> data.getValue().orderDateProperty()
+        );
+
+        statusColumn.setCellValueFactory(
+                data -> data.getValue().statusProperty()
         );
 
         loadOrders();

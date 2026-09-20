@@ -97,12 +97,13 @@ public class OrderDAO {
                 FXCollections.observableArrayList();
 
         String sql = """
-            SELECT id, coffee_name, size,
-                   quantity, price, total, order_date
-            FROM orders
-            WHERE customer_name = ?
-            ORDER BY id DESC
-            """;
+        SELECT id, coffee_name, size,
+               quantity, price, total,
+               order_date, status
+        FROM orders
+        WHERE customer_name = ?
+        ORDER BY id DESC
+        """;
 
         try (Connection connection =
                      DatabaseConnection.getConnection();
@@ -126,7 +127,8 @@ public class OrderDAO {
                                     resultSet.getInt("quantity"),
                                     resultSet.getDouble("price"),
                                     resultSet.getDouble("total"),
-                                    resultSet.getString("order_date")
+                                    resultSet.getString("order_date"),
+                                    resultSet.getString("status")
                             );
 
                     orderList.add(order);
