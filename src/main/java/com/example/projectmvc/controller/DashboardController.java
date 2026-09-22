@@ -211,4 +211,33 @@ public class DashboardController {
 
         stage.show();
     }
+    @FXML
+    private void openBilling(ActionEvent event)
+            throws Exception {
+
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/com/example/projectmvc/view/admin-billing-view.fxml"
+                        )
+                );
+
+        Parent billingPage =
+                loader.load();
+
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.setScene(
+                new Scene(billingPage)
+        );
+
+        stage.setTitle(
+                "CoffeeFlow - Billing"
+        );
+
+        stage.show();
+    }
 }

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.projectmvc.controller.BillingController"
+            minWidth="700.0"
+            minHeight="500.0"
+            prefWidth="900.0"
+            prefHeight="600.0"
+            style="-fx-background-color: #F5EFE6;">
+
+    <padding>
+        <Insets top="30.0"
+                right="40.0"
+                bottom="30.0"
+                left="40.0"/>
+    </padding>
+
+
+    <!-- TOP -->
+
+    <top>
+
+        <VBox spacing="8.0"
+              alignment="CENTER">
+
+            <Label text="Billing &amp; Payment"
+                   style="-fx-text-fill: #6F4E37;">
+
+                <font>
+                    <Font name="System Bold"
+                          size="28.0"/>
+                </font>
+
+            </Label>
+
+            <Label text="Review your order and complete payment"
+                   style="-fx-text-fill: #666666;"/>
+
+        </VBox>
+
+    </top>
+
+
+    <!-- CENTER -->
+
+    <center>
+
+        <VBox spacing="15.0">
+
+            <Label text="Order Summary"
+                   style="-fx-text-fill: #6F4E37;">
+
+                <font>
+                    <Font name="System Bold"
+                          size="18.0"/>
+                </font>
+
+            </Label>
+
+
+            <TableView fx:id="billingTable"
+                       VBox.vgrow="ALWAYS">
+
+                <columns>
+
+                    <TableColumn fx:id="coffeeColumn"
+                                 text="Coffee"
+                                 prefWidth="180.0"/>
+
+                    <TableColumn fx:id="sizeColumn"
+                                 text="Size"
+                                 prefWidth="100.0"/>
+
+                    <TableColumn fx:id="quantityColumn"
+                                 text="Quantity"
+                                 prefWidth="100.0"/>
+
+                    <TableColumn fx:id="priceColumn"
+                                 text="Price"
+                                 prefWidth="120.0"/>
+
+                    <TableColumn fx:id="totalColumn"
+                                 text="Total"
+                                 prefWidth="120.0"/>
+
+                </columns>
+
+            </TableView>
+
+
+            <HBox alignment="CENTER_RIGHT">
+
+                <Label text="Total: Tk "
+                       style="-fx-text-fill: #6F4E37;">
+
+                    <font>
+                        <Font name="System Bold"
+                              size="20.0"/>
+                    </font>
+
+                </Label>
+
+                <Label fx:id="totalLabel"
+                       text="0.00"
+                       style="-fx-text-fill: #6F4E37;">
+
+                    <font>
+                        <Font name="System Bold"
+                              size="20.0"/>
+                    </font>
+
+                </Label>
+
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+
+    <!-- BOTTOM -->
+
+    <bottom>
+
+        <VBox spacing="15.0">
+
+            <Label text="Payment Method"
+                   style="-fx-text-fill: #6F4E37;">
+
+                <font>
+                    <Font name="System Bold"
+                          size="15.0"/>
+                </font>
+
+            </Label>
+
+
+            <ComboBox fx:id="paymentMethodComboBox"
+                      promptText="Select payment method"
+                      prefHeight="38.0"
+                      maxWidth="Infinity"/>
+
+
+            <HBox alignment="CENTER_RIGHT"
+                  spacing="12.0">
+
+                <Button text="Back"
+                        onAction="#goBack"
+                        prefWidth="100.0"
+                        prefHeight="38.0"/>
+
+                <Button fx:id="confirmPaymentButton"
+                        text="Confirm Payment"
+                        onAction="#handleConfirmPayment"
+                        prefWidth="150.0"
+                        prefHeight="38.0"
+                        style="-fx-background-color: #6F4E37;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;"/>
+
+            </HBox>
+
+        </VBox>
+
+    </bottom>
+
+</BorderPane>

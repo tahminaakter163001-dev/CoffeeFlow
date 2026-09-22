@@ -275,4 +275,149 @@ public class OrderDAO {
 
         return 0;
     }
+    public int createBill(
+            String customerName,
+            double totalAmount,
+            String paymentMethod) {
+
+        String sql = """
+        INSERT INTO bills
+        (customer_name, total_amount,
+         payment_method, payment_status, payment_date)
+        VALUES (?, ?, ?, ?, ?)
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(
+                             sql,
+                             java.sql.Statement.RETURN_GENERATED_KEYS
+                     )) {
+
+            statement.setString(
+                    1, customerName
+            );
+
+            statement.setDouble(
+                    2, totalAmount
+            );
+
+            statement.setString(
+                    3, paymentMethod
+            );
+
+            statement.setString(
+                    4, "Paid"
+            );
+
+            String paymentDate =
+                    LocalDateTime.now()
+                            .format(
+                                    DateTimeFormatter.ofPattern(
+                                            "yyyy-MM-dd HH:mm:ss"
+                                    )
+                            );
+
+            statement.setString(
+                    5, paymentDate
+            );
+
+            statement.executeUpdate();
+
+            try (ResultSet resultSet =
+                         statement.getGeneratedKeys()) {
+
+                if (resultSet.next()) {
+
+                    return resultSet.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Bill creation error: "
+                            + e.getMessage()
+            );
+        }
+
+        return -1;
+    }
+    public boolean saveOrderWithBill(
+            String customerName,
+            OrderItem item,
+            int billId) {
+
+        String sql = """
+        INSERT INTO orders
+        (customer_name, coffee_name, size,
+         quantity, price, total, order_date,
+         status, bill_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(
+                    1, customerName
+            );
+
+            statement.setString(
+                    2, item.getCoffeeName()
+            );
+
+            statement.setString(
+                    3, item.getSize()
+            );
+
+            statement.setInt(
+                    4, item.getQuantity()
+            );
+
+            statement.setDouble(
+                    5, item.getPrice()
+            );
+
+            statement.setDouble(
+                    6, item.getTotal()
+            );
+
+            String orderDate =
+                    LocalDateTime.now()
+                            .format(
+                                    DateTimeFormatter.ofPattern(
+                                            "yyyy-MM-dd HH:mm:ss"
+                                    )
+                            );
+
+            statement.setString(
+                    7, orderDate
+            );
+
+            statement.setString(
+                    8, "Pending"
+            );
+
+            statement.setInt(
+                    9, billId
+            );
+
+            statement.executeUpdate();
+
+            return true;
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Order save error: "
+                            + e.getMessage()
+            );
+
+            return false;
+        }
+    }
 }

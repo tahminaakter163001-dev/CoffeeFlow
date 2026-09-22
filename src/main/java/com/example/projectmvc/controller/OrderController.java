@@ -237,7 +237,8 @@ public class OrderController {
     }
 
     @FXML
-    private void handlePlaceOrder(ActionEvent event) {
+    private void handlePlaceOrder(ActionEvent event)
+            throws Exception {
 
         if (cart.isEmpty()) {
 
@@ -247,78 +248,48 @@ public class OrderController {
 
             return;
         }
-        placeOrderButton.setDisable(true);
-        String customerName =
-                SessionManager.getUsername();
+
+
+        FXMLLoader loader =
+                new FXMLLoader(
+                        getClass().getResource(
+                                "/com/example/projectmvc/view/billing-view.fxml"
+                        )
+                );
+
+
+        Parent billingPage =
+                loader.load();
+
+
+        BillingController controller =
+                loader.getController();
+
 
         ObservableList<OrderItem> orderItems =
                 FXCollections.observableArrayList(cart);
 
-        Task<Boolean> orderTask =
-                new Task<>() {
 
-                    @Override
-                    protected Boolean call() {
+        controller.setOrderItems(orderItems);
 
-                        boolean success = true;
 
-                        for (OrderItem item : orderItems) {
+        Stage stage =
+                (Stage) ((Node) event.getSource())
+                        .getScene()
+                        .getWindow();
 
-                            boolean saved =
-                                    orderDAO.saveOrder(
-                                            customerName,
-                                            item
-                                    );
 
-                            if (!saved) {
-                                success = false;
-                                break;
-                            }
-                        }
+        stage.setScene(
+                new Scene(billingPage)
+        );
 
-                        return success;
-                    }
-                };
 
-        orderTask.setOnSucceeded(e -> {
+        stage.setTitle(
+                "CoffeeFlow - Billing"
+        );
 
-            placeOrderButton.setDisable(false);
 
-            boolean success =
-                    orderTask.getValue();
-
-            if (success) {
-
-                cart.clear();
-                updateTotal();
-
-                showMessage(
-                        "Order placed successfully!"
-                );
-
-            } else {
-
-                showMessage(
-                        "Failed to place order."
-                );
-            }
-        });
-
-        orderTask.setOnFailed(e -> {
-
-            placeOrderButton.setDisable(false);
-
-            showMessage(
-                    "An error occurred while placing the order."
-            );
-        });
-
-        Thread orderThread =
-                new Thread(orderTask);
-
-        orderThread.setDaemon(true);
-
-        orderThread.start();
+        stage.show();
     }
 
     @FXML

@@ -80,7 +80,8 @@
 
             <Button text="Billing"
                     maxWidth="Infinity"
-                    prefHeight="40.0"/>
+                    prefHeight="40.0"
+                    onAction="#openBilling"/>
 
             <Button text="Logout"
                     onAction="#logout"
