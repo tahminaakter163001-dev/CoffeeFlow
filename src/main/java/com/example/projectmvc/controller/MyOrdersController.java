@@ -1,60 +1,72 @@
 package com.example.projectmvc.controller;
 
-import com.example.projectmvc.database.OrderDAO;
-import com.example.projectmvc.model.OrderHistory;
 import com.example.projectmvc.SessionManager;
+import com.example.projectmvc.database.OrderDAO;
+import com.example.projectmvc.model.CustomerOrder;
 
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import javafx.concurrent.Task;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableCell;
 
 public class MyOrdersController {
 
     @FXML
-    private TableView<OrderHistory> ordersTable;
+    private TableView<CustomerOrder> ordersTable;
 
     @FXML
-    private TableColumn<OrderHistory, Number> idColumn;
+    private TableColumn<CustomerOrder, Number> orderIdColumn;
 
     @FXML
-    private TableColumn<OrderHistory, String> coffeeColumn;
+    private TableColumn<CustomerOrder, Number> billIdColumn;
 
     @FXML
-    private TableColumn<OrderHistory, String> sizeColumn;
+    private TableColumn<CustomerOrder, String> coffeeColumn;
 
     @FXML
-    private TableColumn<OrderHistory, Number> quantityColumn;
+    private TableColumn<CustomerOrder, String> sizeColumn;
 
     @FXML
-    private TableColumn<OrderHistory, Number> priceColumn;
+    private TableColumn<CustomerOrder, Number> quantityColumn;
 
     @FXML
-    private TableColumn<OrderHistory, Number> totalColumn;
+    private TableColumn<CustomerOrder, Number> priceColumn;
 
     @FXML
-    private TableColumn<OrderHistory, String> dateColumn;
+    private TableColumn<CustomerOrder, Number> totalColumn;
 
     @FXML
-    private TableColumn<OrderHistory, String> statusColumn;
+    private TableColumn<CustomerOrder, String> orderDateColumn;
 
-    private final OrderDAO orderDAO = new OrderDAO();
+    @FXML
+    private TableColumn<CustomerOrder, String> orderStatusColumn;
+
+    @FXML
+    private TableColumn<CustomerOrder, String> paymentMethodColumn;
+
+    @FXML
+    private TableColumn<CustomerOrder, String> paymentStatusColumn;
+
+    private final OrderDAO orderDAO =
+            new OrderDAO();
 
     @FXML
     private void initialize() {
 
-        idColumn.setCellValueFactory(
-                data -> data.getValue().idProperty()
+        orderIdColumn.setCellValueFactory(
+                data -> data.getValue().orderIdProperty()
+        );
+
+        billIdColumn.setCellValueFactory(
+                data -> data.getValue().billIdProperty()
         );
 
         coffeeColumn.setCellValueFactory(
@@ -77,23 +89,36 @@ public class MyOrdersController {
                 data -> data.getValue().totalProperty()
         );
 
-        dateColumn.setCellValueFactory(
+        orderDateColumn.setCellValueFactory(
                 data -> data.getValue().orderDateProperty()
         );
 
-        statusColumn.setCellValueFactory(
-                data -> data.getValue().statusProperty()
+        orderStatusColumn.setCellValueFactory(
+                data -> data.getValue().orderStatusProperty()
         );
-        statusColumn.setCellFactory(column -> {
 
-            return new TableCell<OrderHistory, String>() {
+        paymentMethodColumn.setCellValueFactory(
+                data -> data.getValue().paymentMethodProperty()
+        );
+
+        paymentStatusColumn.setCellValueFactory(
+                data -> data.getValue().paymentStatusProperty()
+        );
+
+        // Order status colors
+        orderStatusColumn.setCellFactory(column -> {
+
+            return new TableCell<CustomerOrder, String>() {
 
                 @Override
                 protected void updateItem(
                         String status,
                         boolean empty) {
 
-                    super.updateItem(status, empty);
+                    super.updateItem(
+                            status,
+                            empty
+                    );
 
                     if (empty || status == null) {
 
@@ -104,45 +129,70 @@ public class MyOrdersController {
 
                         setText(status);
 
-                        switch (status) {
+                        if (status.equals("Completed")) {
 
-                            case "Cancelled":
-                                setStyle(
-                                        "-fx-text-fill: red;" +
-                                                "-fx-font-weight: bold;"
-                                );
-                                break;
+                            setStyle(
+                                    "-fx-text-fill: green;" +
+                                            "-fx-font-weight: bold;"
+                            );
 
-                            case "Completed":
-                                setStyle(
-                                        "-fx-text-fill: green;" +
-                                                "-fx-font-weight: bold;"
-                                );
-                                break;
+                        } else if (
+                                status.equals("Cancelled")) {
 
-                            case "Pending":
-                                setStyle(
-                                        "-fx-text-fill: orange;" +
-                                                "-fx-font-weight: bold;"
-                                );
-                                break;
+                            setStyle(
+                                    "-fx-text-fill: red;" +
+                                            "-fx-font-weight: bold;"
+                            );
 
-                            case "Preparing":
-                                setStyle(
-                                        "-fx-text-fill: blue;" +
-                                                "-fx-font-weight: bold;"
-                                );
-                                break;
+                        } else {
 
-                            case "Ready":
-                                setStyle(
-                                        "-fx-text-fill: purple;" +
-                                                "-fx-font-weight: bold;"
-                                );
-                                break;
+                            setStyle(
+                                    "-fx-text-fill: #6F4E37;" +
+                                            "-fx-font-weight: bold;"
+                            );
+                        }
+                    }
+                }
+            };
+        });
 
-                            default:
-                                setStyle("");
+        // Payment status colors
+        paymentStatusColumn.setCellFactory(column -> {
+
+            return new TableCell<CustomerOrder, String>() {
+
+                @Override
+                protected void updateItem(
+                        String status,
+                        boolean empty) {
+
+                    super.updateItem(
+                            status,
+                            empty
+                    );
+
+                    if (empty || status == null) {
+
+                        setText(null);
+                        setStyle("");
+
+                    } else {
+
+                        setText(status);
+
+                        if (status.equals("Paid")) {
+
+                            setStyle(
+                                    "-fx-text-fill: green;" +
+                                            "-fx-font-weight: bold;"
+                            );
+
+                        } else {
+
+                            setStyle(
+                                    "-fx-text-fill: orange;" +
+                                            "-fx-font-weight: bold;"
+                            );
                         }
                     }
                 }
@@ -154,185 +204,42 @@ public class MyOrdersController {
 
     private void loadOrders() {
 
-        String username =
+        String customerName =
                 SessionManager.getUsername();
 
-        // Background database task
-        Task<ObservableList<OrderHistory>> orderTask =
+        Task<ObservableList<CustomerOrder>> orderTask =
                 new Task<>() {
 
                     @Override
-                    protected ObservableList<OrderHistory> call() {
+                    protected ObservableList<CustomerOrder> call() {
 
-                        return orderDAO.getCustomerOrders(
-                                username
-                        );
+                        return orderDAO
+                                .getCustomerOrdersWithBilling(
+                                        customerName
+                                );
                     }
                 };
 
-        // Task completed successfully
         orderTask.setOnSucceeded(e -> {
 
-            ObservableList<OrderHistory> orders =
-                    orderTask.getValue();
-
-            ordersTable.setItems(orders);
-        });
-
-        // Task failed unexpectedly
-        orderTask.setOnFailed(e -> {
-
-            System.out.println(
-                    "An error occurred while loading orders."
+            ordersTable.setItems(
+                    orderTask.getValue()
             );
         });
 
-        // Start background thread
+        orderTask.setOnFailed(e -> {
+
+            System.out.println(
+                    "Error while loading customer orders."
+            );
+        });
+
         Thread orderThread =
                 new Thread(orderTask);
 
         orderThread.setDaemon(true);
 
         orderThread.start();
-    }
-
-    @FXML
-    private void handleCancelOrder() {
-
-        OrderHistory selectedOrder =
-                ordersTable.getSelectionModel()
-                        .getSelectedItem();
-
-        if (selectedOrder == null) {
-
-            Alert alert =
-                    new Alert(Alert.AlertType.WARNING);
-
-            alert.setTitle("Cancel Order");
-            alert.setHeaderText(null);
-            alert.setContentText(
-                    "Please select an order first."
-            );
-
-            alert.showAndWait();
-
-            return;
-        }
-
-        String currentStatus =
-                selectedOrder.getStatus();
-
-        if (!currentStatus.equals("Pending")) {
-
-            Alert alert =
-                    new Alert(Alert.AlertType.WARNING);
-
-            alert.setTitle("Cancel Order");
-            alert.setHeaderText(null);
-            alert.setContentText(
-                    "Only Pending orders can be cancelled."
-            );
-
-            alert.showAndWait();
-
-            return;
-        }
-
-        Alert confirmation =
-                new Alert(Alert.AlertType.CONFIRMATION);
-
-        confirmation.setTitle("Cancel Order");
-        confirmation.setHeaderText("Cancel Order");
-
-        confirmation.setContentText(
-                "Are you sure you want to cancel Order ID "
-                        + selectedOrder.getId()
-                        + "?"
-        );
-
-        ButtonType result =
-                confirmation.showAndWait()
-                        .orElse(ButtonType.CANCEL);
-
-        if (result != ButtonType.OK) {
-            return;
-        }
-
-        int orderId =
-                selectedOrder.getId();
-
-        Task<Boolean> cancelTask =
-                new Task<>() {
-
-                    @Override
-                    protected Boolean call() {
-
-                        return orderDAO.updateOrderStatus(
-                                orderId,
-                                "Cancelled"
-                        );
-                    }
-                };
-
-        cancelTask.setOnSucceeded(e -> {
-
-            boolean success =
-                    cancelTask.getValue();
-
-            if (success) {
-
-                selectedOrder
-                        .statusProperty()
-                        .set("Cancelled");
-
-                ordersTable.refresh();
-
-                Alert alert =
-                        new Alert(Alert.AlertType.INFORMATION);
-
-                alert.setTitle("Order Cancelled");
-                alert.setHeaderText(null);
-                alert.setContentText(
-                        "Order cancelled successfully."
-                );
-
-                alert.showAndWait();
-
-            } else {
-
-                Alert alert =
-                        new Alert(Alert.AlertType.ERROR);
-
-                alert.setTitle("Cancel Order");
-                alert.setHeaderText(null);
-                alert.setContentText(
-                        "Failed to cancel the order."
-                );
-
-                alert.showAndWait();
-            }
-        });
-
-        cancelTask.setOnFailed(e -> {
-
-            Alert alert =
-                    new Alert(Alert.AlertType.ERROR);
-
-            alert.setTitle("Cancel Order");
-            alert.setHeaderText(null);
-            alert.setContentText(
-                    "An error occurred while cancelling the order."
-            );
-
-            alert.showAndWait();
-        });
-
-        Thread cancelThread =
-                new Thread(cancelTask);
-
-        cancelThread.setDaemon(true);
-
-        cancelThread.start();
     }
 
     @FXML
@@ -346,7 +253,7 @@ public class MyOrdersController {
                         )
                 );
 
-        Parent customerDashboard =
+        Parent dashboardPage =
                 loader.load();
 
         Stage stage =
@@ -355,7 +262,7 @@ public class MyOrdersController {
                         .getWindow();
 
         stage.setScene(
-                new Scene(customerDashboard)
+                new Scene(dashboardPage)
         );
 
         stage.setTitle(
@@ -365,5 +272,3 @@ public class MyOrdersController {
         stage.show();
     }
 }
-
-

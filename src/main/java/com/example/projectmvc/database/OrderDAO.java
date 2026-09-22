@@ -3,6 +3,7 @@ package com.example.projectmvc.database;
 import com.example.projectmvc.model.OrderItem;
 import com.example.projectmvc.model.OrderHistory;
 import com.example.projectmvc.model.AdminOrder;
+import com.example.projectmvc.model.CustomerOrder;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -445,5 +446,75 @@ public class OrderDAO {
 
             return false;
         }
+    }
+    public ObservableList<CustomerOrder> getCustomerOrdersWithBilling(
+            String customerName) {
+
+        ObservableList<CustomerOrder> orderList =
+                FXCollections.observableArrayList();
+
+        String sql = """
+        SELECT
+            o.id AS order_id,
+            o.bill_id,
+            o.coffee_name,
+            o.size,
+            o.quantity,
+            o.price,
+            o.total,
+            o.order_date,
+            o.status AS order_status,
+            b.payment_method,
+            b.payment_status
+        FROM orders o
+        LEFT JOIN bills b
+            ON o.bill_id = b.id
+        WHERE o.customer_name = ?
+        ORDER BY o.id DESC
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, customerName);
+
+            try (ResultSet resultSet =
+                         statement.executeQuery()) {
+
+                while (resultSet.next()) {
+
+                    int billId =
+                            resultSet.getInt("bill_id");
+
+                    CustomerOrder order =
+                            new CustomerOrder(
+                                    resultSet.getInt("order_id"),
+                                    billId,
+                                    resultSet.getString("coffee_name"),
+                                    resultSet.getString("size"),
+                                    resultSet.getInt("quantity"),
+                                    resultSet.getDouble("price"),
+                                    resultSet.getDouble("total"),
+                                    resultSet.getString("order_date"),
+                                    resultSet.getString("order_status"),
+                                    resultSet.getString("payment_method"),
+                                    resultSet.getString("payment_status")
+                            );
+
+                    orderList.add(order);
+                }
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Customer order retrieve error: "
+                            + e.getMessage()
+            );
+        }
+
+        return orderList;
     }
 }
