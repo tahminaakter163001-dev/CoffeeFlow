@@ -275,81 +275,20 @@ public class OrderDAO {
 
         return 0;
     }
-    public int createBill(
+    public boolean saveBillWithOrders(
             String customerName,
             double totalAmount,
-            String paymentMethod) {
+            String paymentMethod,
+            ObservableList<OrderItem> orderItems) {
 
-        String sql = """
+        String billSql = """
         INSERT INTO bills
         (customer_name, total_amount,
          payment_method, payment_status, payment_date)
         VALUES (?, ?, ?, ?, ?)
         """;
 
-        try (Connection connection =
-                     DatabaseConnection.getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(
-                             sql,
-                             java.sql.Statement.RETURN_GENERATED_KEYS
-                     )) {
-
-            statement.setString(
-                    1, customerName
-            );
-
-            statement.setDouble(
-                    2, totalAmount
-            );
-
-            statement.setString(
-                    3, paymentMethod
-            );
-
-            statement.setString(
-                    4, "Paid"
-            );
-
-            String paymentDate =
-                    LocalDateTime.now()
-                            .format(
-                                    DateTimeFormatter.ofPattern(
-                                            "yyyy-MM-dd HH:mm:ss"
-                                    )
-                            );
-
-            statement.setString(
-                    5, paymentDate
-            );
-
-            statement.executeUpdate();
-
-            try (ResultSet resultSet =
-                         statement.getGeneratedKeys()) {
-
-                if (resultSet.next()) {
-
-                    return resultSet.getInt(1);
-                }
-            }
-
-        } catch (SQLException e) {
-
-            System.out.println(
-                    "Bill creation error: "
-                            + e.getMessage()
-            );
-        }
-
-        return -1;
-    }
-    public boolean saveOrderWithBill(
-            String customerName,
-            OrderItem item,
-            int billId) {
-
-        String sql = """
+        String orderSql = """
         INSERT INTO orders
         (customer_name, coffee_name, size,
          quantity, price, total, order_date,
@@ -358,62 +297,149 @@ public class OrderDAO {
         """;
 
         try (Connection connection =
-                     DatabaseConnection.getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(sql)) {
+                     DatabaseConnection.getConnection()) {
 
-            statement.setString(
-                    1, customerName
-            );
+            connection.setAutoCommit(false);
 
-            statement.setString(
-                    2, item.getCoffeeName()
-            );
-
-            statement.setString(
-                    3, item.getSize()
-            );
-
-            statement.setInt(
-                    4, item.getQuantity()
-            );
-
-            statement.setDouble(
-                    5, item.getPrice()
-            );
-
-            statement.setDouble(
-                    6, item.getTotal()
-            );
-
-            String orderDate =
-                    LocalDateTime.now()
-                            .format(
-                                    DateTimeFormatter.ofPattern(
-                                            "yyyy-MM-dd HH:mm:ss"
-                                    )
+            try (
+                    PreparedStatement billStatement =
+                            connection.prepareStatement(
+                                    billSql,
+                                    java.sql.Statement.RETURN_GENERATED_KEYS
                             );
 
-            statement.setString(
-                    7, orderDate
-            );
+                    PreparedStatement orderStatement =
+                            connection.prepareStatement(orderSql)
+            ) {
 
-            statement.setString(
-                    8, "Pending"
-            );
+                // -------------------------
+                // Step 1: Create Bill
+                // -------------------------
 
-            statement.setInt(
-                    9, billId
-            );
+                billStatement.setString(1, customerName);
+                billStatement.setDouble(2, totalAmount);
+                billStatement.setString(3, paymentMethod);
+                billStatement.setString(4, "Paid");
 
-            statement.executeUpdate();
+                String paymentDate =
+                        LocalDateTime.now()
+                                .format(
+                                        DateTimeFormatter.ofPattern(
+                                                "yyyy-MM-dd HH:mm:ss"
+                                        )
+                                );
 
-            return true;
+                billStatement.setString(5, paymentDate);
+
+                billStatement.executeUpdate();
+
+                // Get generated Bill ID
+                int billId;
+
+                try (ResultSet resultSet =
+                             billStatement.getGeneratedKeys()) {
+
+                    if (!resultSet.next()) {
+
+                        connection.rollback();
+
+                        return false;
+                    }
+
+                    billId = resultSet.getInt(1);
+                }
+
+                // -------------------------
+                // Step 2: Save Orders
+                // -------------------------
+
+                String orderDate =
+                        LocalDateTime.now()
+                                .format(
+                                        DateTimeFormatter.ofPattern(
+                                                "yyyy-MM-dd HH:mm:ss"
+                                        )
+                                );
+
+                for (OrderItem item : orderItems) {
+
+                    orderStatement.setString(
+                            1,
+                            customerName
+                    );
+
+                    orderStatement.setString(
+                            2,
+                            item.getCoffeeName()
+                    );
+
+                    orderStatement.setString(
+                            3,
+                            item.getSize()
+                    );
+
+                    orderStatement.setInt(
+                            4,
+                            item.getQuantity()
+                    );
+
+                    orderStatement.setDouble(
+                            5,
+                            item.getPrice()
+                    );
+
+                    orderStatement.setDouble(
+                            6,
+                            item.getTotal()
+                    );
+
+                    orderStatement.setString(
+                            7,
+                            orderDate
+                    );
+
+                    orderStatement.setString(
+                            8,
+                            "Pending"
+                    );
+
+                    orderStatement.setInt(
+                            9,
+                            billId
+                    );
+
+                    orderStatement.executeUpdate();
+                }
+
+                // -------------------------
+                // Step 3: Commit
+                // -------------------------
+
+                connection.commit();
+
+                System.out.println(
+                        "Bill and orders saved successfully!"
+                );
+
+                return true;
+
+            } catch (SQLException e) {
+
+                // Something failed
+                connection.rollback();
+
+                System.out.println(
+                        "Transaction rolled back: "
+                                + e.getMessage()
+                );
+
+                return false;
+            }
 
         } catch (SQLException e) {
 
             System.out.println(
-                    "Order save error: "
+                    "Database transaction error: "
                             + e.getMessage()
             );
 

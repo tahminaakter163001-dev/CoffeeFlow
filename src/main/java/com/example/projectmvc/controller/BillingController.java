@@ -163,41 +163,12 @@ public class BillingController {
                     @Override
                     protected Boolean call() {
 
-                        // Step 1: Create bill
-                        int billId =
-                                orderDAO.createBill(
-                                        customerName,
-                                        totalAmount,
-                                        paymentMethod
-                                );
-
-
-                        if (billId == -1) {
-
-                            return false;
-                        }
-
-
-                        // Step 2: Save all order items
-                        for (OrderItem item :
-                                itemsToSave) {
-
-                            boolean saved =
-                                    orderDAO.saveOrderWithBill(
-                                            customerName,
-                                            item,
-                                            billId
-                                    );
-
-
-                            if (!saved) {
-
-                                return false;
-                            }
-                        }
-
-
-                        return true;
+                        return orderDAO.saveBillWithOrders(
+                                customerName,
+                                totalAmount,
+                                paymentMethod,
+                                itemsToSave
+                        );
                     }
                 };
 
