@@ -19,8 +19,8 @@
 
     <!-- Top Header -->
     <top>
-        <HBox alignment="CENTER_LEFT"
-              spacing="20.0"
+        <VBox alignment="CENTER_LEFT"
+              spacing="2.0"
               style="-fx-background-color: #6F4E37;">
 
             <padding>
@@ -34,7 +34,8 @@
                    textFill="WHITE">
 
                 <font>
-                    <Font name="System Bold" size="26.0"/>
+                    <Font name="System Bold"
+                          size="26.0"/>
                 </font>
 
             </Label>
@@ -48,7 +49,7 @@
 
             </Label>
 
-        </HBox>
+        </VBox>
     </top>
 
     <!-- Left Navigation -->
