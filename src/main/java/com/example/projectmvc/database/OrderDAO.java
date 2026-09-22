@@ -517,46 +517,136 @@ public class OrderDAO {
 
         return orderList;
     }
-    public boolean cancelCustomerOrder(
-            int orderId,
+    public boolean cancelCustomerBill(
+            int billId,
             String customerName) {
 
-        String sql = """
+        String checkSql = """
+        SELECT COUNT(*) AS total_orders,
+               SUM(
+                   CASE
+                       WHEN status = 'Pending'
+                       THEN 1
+                       ELSE 0
+                   END
+               ) AS pending_orders
+        FROM orders
+        WHERE bill_id = ?
+          AND customer_name = ?
+        """;
+
+        String orderSql = """
         UPDATE orders
         SET status = 'Cancelled'
-        WHERE id = ?
+        WHERE bill_id = ?
           AND customer_name = ?
           AND status = 'Pending'
         """;
 
+        String billSql = """
+        UPDATE bills
+        SET payment_status = 'Cancelled'
+        WHERE id = ?
+          AND customer_name = ?
+          AND payment_status = 'Paid'
+        """;
+
         try (Connection connection =
-                     DatabaseConnection.getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(sql)) {
+                     DatabaseConnection.getConnection()) {
 
-            statement.setInt(1, orderId);
-            statement.setString(2, customerName);
+            connection.setAutoCommit(false);
 
-            int rowsUpdated =
-                    statement.executeUpdate();
+            try (
+                    PreparedStatement checkStatement =
+                            connection.prepareStatement(checkSql);
+                    PreparedStatement orderStatement =
+                            connection.prepareStatement(orderSql);
+                    PreparedStatement billStatement =
+                            connection.prepareStatement(billSql)
+            ) {
 
-            if (rowsUpdated > 0) {
+                // Check bill orders
+                checkStatement.setInt(1, billId);
+                checkStatement.setString(2, customerName);
+
+                int totalOrders;
+                int pendingOrders;
+
+                try (ResultSet resultSet =
+                             checkStatement.executeQuery()) {
+
+                    if (!resultSet.next()) {
+                        connection.rollback();
+                        return false;
+                    }
+
+                    totalOrders =
+                            resultSet.getInt("total_orders");
+
+                    pendingOrders =
+                            resultSet.getInt("pending_orders");
+                }
+
+                // Bill must contain orders
+                if (totalOrders == 0) {
+                    connection.rollback();
+                    return false;
+                }
+
+                // Every order in the bill must be Pending
+                if (pendingOrders != totalOrders) {
+
+                    connection.rollback();
+
+                    System.out.println(
+                            "Bill cannot be cancelled because "
+                                    + "one or more orders are no longer Pending."
+                    );
+
+                    return false;
+                }
+
+                // Cancel all orders
+                orderStatement.setInt(1, billId);
+                orderStatement.setString(2, customerName);
+
+                orderStatement.executeUpdate();
+
+                // Update payment status
+                billStatement.setInt(1, billId);
+                billStatement.setString(2, customerName);
+
+                billStatement.executeUpdate();
+
+                // Everything successful
+                connection.commit();
 
                 System.out.println(
-                        "Order cancelled successfully!"
+                        "Bill and all related orders cancelled!"
                 );
 
                 return true;
+
+            } catch (SQLException e) {
+
+                connection.rollback();
+
+                System.out.println(
+                        "Cancellation transaction rolled back: "
+                                + e.getMessage()
+                );
+
+                return false;
             }
 
         } catch (SQLException e) {
 
             System.out.println(
-                    "Order cancellation error: "
+                    "Cancellation database error: "
                             + e.getMessage()
             );
-        }
 
-        return false;
+            return false;
+        }
     }
 }

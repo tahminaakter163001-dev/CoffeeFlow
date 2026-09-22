@@ -325,12 +325,13 @@ public class MyOrdersController {
         );
 
         confirmation.setHeaderText(
-                "Cancel Order #" +
-                        selectedOrder.getOrderId()
+                "Cancel Bill #" +
+                        selectedOrder.getBillId()
         );
 
         confirmation.setContentText(
-                "Are you sure you want to cancel this order?"
+                "This will cancel all items in this bill.\n\n"
+                        + "Do you want to continue?"
         );
 
         ButtonType result =
@@ -344,14 +345,17 @@ public class MyOrdersController {
         String customerName =
                 SessionManager.getUsername();
 
+        int billId =
+                selectedOrder.getBillId();
+
         Task<Boolean> cancelTask =
                 new Task<>() {
 
                     @Override
                     protected Boolean call() {
 
-                        return orderDAO.cancelCustomerOrder(
-                                selectedOrder.getOrderId(),
+                        return orderDAO.cancelCustomerBill(
+                                billId,
                                 customerName
                         );
                     }
@@ -362,9 +366,10 @@ public class MyOrdersController {
             if (cancelTask.getValue()) {
 
                 showMessage(
-                        "Order #" +
-                                selectedOrder.getOrderId() +
-                                " has been cancelled."
+                        "Bill #" +
+                                billId +
+                                " and all its orders "
+                                + "have been cancelled."
                 );
 
                 loadOrders();
@@ -372,7 +377,9 @@ public class MyOrdersController {
             } else {
 
                 showMessage(
-                        "Order could not be cancelled."
+                        "This bill could not be cancelled.\n\n"
+                                + "Make sure all orders in the bill "
+                                + "are still Pending."
                 );
             }
         });
@@ -380,7 +387,8 @@ public class MyOrdersController {
         cancelTask.setOnFailed(e -> {
 
             showMessage(
-                    "An error occurred while cancelling the order."
+                    "An error occurred while cancelling "
+                            + "the bill."
             );
         });
 
