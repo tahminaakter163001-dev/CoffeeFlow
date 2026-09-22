@@ -15,6 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 public class MyOrdersController {
@@ -270,5 +272,123 @@ public class MyOrdersController {
         );
 
         stage.show();
+    }
+    private void showMessage(String message) {
+
+        Alert alert =
+                new Alert(
+                        Alert.AlertType.INFORMATION
+                );
+
+        alert.setTitle("CoffeeFlow");
+
+        alert.setHeaderText(null);
+
+        alert.setContentText(message);
+
+        alert.showAndWait();
+    }
+    @FXML
+    private void handleCancelOrder(ActionEvent event) {
+
+        CustomerOrder selectedOrder =
+                ordersTable.getSelectionModel()
+                        .getSelectedItem();
+
+        if (selectedOrder == null) {
+
+            showMessage(
+                    "Please select an order to cancel."
+            );
+
+            return;
+        }
+
+        if (!selectedOrder
+                .getOrderStatus()
+                .equals("Pending")) {
+
+            showMessage(
+                    "Only Pending orders can be cancelled."
+            );
+
+            return;
+        }
+
+        Alert confirmation =
+                new Alert(
+                        Alert.AlertType.CONFIRMATION
+                );
+
+        confirmation.setTitle(
+                "Cancel Order"
+        );
+
+        confirmation.setHeaderText(
+                "Cancel Order #" +
+                        selectedOrder.getOrderId()
+        );
+
+        confirmation.setContentText(
+                "Are you sure you want to cancel this order?"
+        );
+
+        ButtonType result =
+                confirmation.showAndWait()
+                        .orElse(ButtonType.CANCEL);
+
+        if (result != ButtonType.OK) {
+            return;
+        }
+
+        String customerName =
+                SessionManager.getUsername();
+
+        Task<Boolean> cancelTask =
+                new Task<>() {
+
+                    @Override
+                    protected Boolean call() {
+
+                        return orderDAO.cancelCustomerOrder(
+                                selectedOrder.getOrderId(),
+                                customerName
+                        );
+                    }
+                };
+
+        cancelTask.setOnSucceeded(e -> {
+
+            if (cancelTask.getValue()) {
+
+                showMessage(
+                        "Order #" +
+                                selectedOrder.getOrderId() +
+                                " has been cancelled."
+                );
+
+                loadOrders();
+
+            } else {
+
+                showMessage(
+                        "Order could not be cancelled."
+                );
+            }
+        });
+
+        cancelTask.setOnFailed(e -> {
+
+            showMessage(
+                    "An error occurred while cancelling the order."
+            );
+        });
+
+        Thread cancelThread =
+                new Thread(cancelTask);
+
+        cancelThread.setDaemon(true);
+
+        cancelThread.start();
     }
 }

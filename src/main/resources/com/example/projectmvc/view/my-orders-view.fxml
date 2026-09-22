@@ -58,57 +58,77 @@
     </top>
 
     <center>
-        <TableView fx:id="ordersTable">
 
-            <columns>
+        <VBox spacing="15.0">
 
-                <TableColumn fx:id="orderIdColumn"
-                             text="Order ID"
-                             prefWidth="80.0"/>
+            <TableView fx:id="ordersTable"
+                       VBox.vgrow="ALWAYS">
 
-                <TableColumn fx:id="billIdColumn"
-                             text="Bill ID"
-                             prefWidth="80.0"/>
+                <columns>
 
-                <TableColumn fx:id="coffeeColumn"
-                             text="Coffee"
-                             prefWidth="150.0"/>
+                    <TableColumn fx:id="orderIdColumn"
+                                 text="Order ID"
+                                 prefWidth="80.0"/>
 
-                <TableColumn fx:id="sizeColumn"
-                             text="Size"
-                             prefWidth="90.0"/>
+                    <TableColumn fx:id="billIdColumn"
+                                 text="Bill ID"
+                                 prefWidth="80.0"/>
 
-                <TableColumn fx:id="quantityColumn"
-                             text="Quantity"
-                             prefWidth="90.0"/>
+                    <TableColumn fx:id="coffeeColumn"
+                                 text="Coffee"
+                                 prefWidth="150.0"/>
 
-                <TableColumn fx:id="priceColumn"
-                             text="Price"
-                             prefWidth="100.0"/>
+                    <TableColumn fx:id="sizeColumn"
+                                 text="Size"
+                                 prefWidth="90.0"/>
 
-                <TableColumn fx:id="totalColumn"
-                             text="Total"
-                             prefWidth="100.0"/>
+                    <TableColumn fx:id="quantityColumn"
+                                 text="Quantity"
+                                 prefWidth="90.0"/>
 
-                <TableColumn fx:id="orderDateColumn"
-                             text="Order Date"
-                             prefWidth="170.0"/>
+                    <TableColumn fx:id="priceColumn"
+                                 text="Price"
+                                 prefWidth="100.0"/>
 
-                <TableColumn fx:id="orderStatusColumn"
-                             text="Order Status"
-                             prefWidth="120.0"/>
+                    <TableColumn fx:id="totalColumn"
+                                 text="Total"
+                                 prefWidth="100.0"/>
 
-                <TableColumn fx:id="paymentMethodColumn"
-                             text="Payment Method"
-                             prefWidth="140.0"/>
+                    <TableColumn fx:id="orderDateColumn"
+                                 text="Order Date"
+                                 prefWidth="170.0"/>
 
-                <TableColumn fx:id="paymentStatusColumn"
-                             text="Payment Status"
-                             prefWidth="120.0"/>
+                    <TableColumn fx:id="orderStatusColumn"
+                                 text="Order Status"
+                                 prefWidth="120.0"/>
 
-            </columns>
+                    <TableColumn fx:id="paymentMethodColumn"
+                                 text="Payment Method"
+                                 prefWidth="140.0"/>
 
-        </TableView>
+                    <TableColumn fx:id="paymentStatusColumn"
+                                 text="Payment Status"
+                                 prefWidth="120.0"/>
+
+                </columns>
+
+            </TableView>
+
+            <HBox alignment="CENTER_RIGHT">
+
+                <Button text="Cancel Selected Order"
+                        onAction="#handleCancelOrder"
+                        prefWidth="180.0"
+                        prefHeight="40.0"
+                        style="-fx-background-color: #B85450;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 8;"/>
+
+            </HBox>
+
+        </VBox>
+
     </center>
 
     <bottom>

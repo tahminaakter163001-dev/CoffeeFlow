@@ -517,4 +517,46 @@ public class OrderDAO {
 
         return orderList;
     }
+    public boolean cancelCustomerOrder(
+            int orderId,
+            String customerName) {
+
+        String sql = """
+        UPDATE orders
+        SET status = 'Cancelled'
+        WHERE id = ?
+          AND customer_name = ?
+          AND status = 'Pending'
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setInt(1, orderId);
+            statement.setString(2, customerName);
+
+            int rowsUpdated =
+                    statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+
+                System.out.println(
+                        "Order cancelled successfully!"
+                );
+
+                return true;
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Order cancellation error: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
 }
