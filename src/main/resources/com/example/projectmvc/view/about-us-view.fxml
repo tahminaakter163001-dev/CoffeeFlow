@@ -1,49 +1,259 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.projectmvc.controller.AboutUsController"
-            minWidth="600"
-            minHeight="400">
+            minWidth="900.0"
+            minHeight="600.0"
+            prefWidth="1000.0"
+            prefHeight="650.0"
+            style="-fx-background-color: #F5EFE6;">
 
-    <center>
-        <VBox alignment="CENTER"
-              spacing="18"
-              maxWidth="700"
-              BorderPane.alignment="CENTER">
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="20.0"
+              prefHeight="80.0"
+              style="-fx-background-color: #6F4E37;">
 
             <padding>
-                <Insets top="40" right="50" bottom="40" left="50"/>
+                <Insets top="0.0"
+                        right="35.0"
+                        bottom="0.0"
+                        left="35.0"/>
             </padding>
 
+            <Label text="☕ CoffeeFlow"
+                   textFill="WHITE">
+
+                <font>
+                    <Font name="System Bold"
+                          size="24.0"/>
+                </font>
+
+            </Label>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Button text="← Back to Home"
+                    onAction="#handleBack"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: white;
+                           -fx-font-size: 13px;
+                           -fx-font-weight: bold;
+                           -fx-cursor: hand;"/>
+
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox alignment="TOP_CENTER"
+              spacing="22.0">
+
+            <padding>
+                <Insets top="35.0"
+                        right="45.0"
+                        bottom="35.0"
+                        left="45.0"/>
+            </padding>
+
+            <!-- Title -->
             <Label fx:id="titleLabel"
                    text="About CoffeeFlow"
-                   style="-fx-font-size: 30px; -fx-font-weight: bold;"/>
+                   textFill="#4A3428">
 
-            <Label fx:id="descriptionLabel"
-                   text="Loading..."
-                   wrapText="true"
-                   maxWidth="600"
-                   style="-fx-font-size: 16px;"/>
+                <font>
+                    <Font name="System Bold"
+                          size="32.0"/>
+                </font>
 
-            <Label fx:id="versionLabel"
-                   text="Version:"
-                   style="-fx-font-size: 14px;"/>
+            </Label>
 
-            <Label fx:id="contactLabel"
-                   text="Contact:"
-                   style="-fx-font-size: 14px;"/>
+            <Label text="A little more about your coffee experience."
+                   textFill="#8C7A6B">
 
-            <Button text="Back"
-                    onAction="#handleBack"
-                    prefWidth="120"
-                    prefHeight="40"/>
+                <font>
+                    <Font size="15.0"/>
+                </font>
+
+            </Label>
+
+            <!-- Main Story Card -->
+            <VBox alignment="CENTER"
+                  spacing="12.0"
+                  maxWidth="850.0"
+                  style="-fx-background-color: #FFF9F3;
+                         -fx-background-radius: 18;
+                         -fx-border-color: #D6C2B3;
+                         -fx-border-radius: 18;
+                         -fx-border-width: 1;
+                         -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.12), 10, 0, 0, 3);">
+
+                <padding>
+                    <Insets top="22.0"
+                            right="30.0"
+                            bottom="22.0"
+                            left="30.0"/>
+                </padding>
+
+                <Label text="Our Story"
+                       textFill="#4A3428">
+
+                    <font>
+                        <Font name="System Bold"
+                              size="21.0"/>
+                    </font>
+
+                </Label>
+
+                <Label fx:id="descriptionLabel"
+                       text="CoffeeFlow is a modern coffee shop management system designed to make everyday coffee shop operations simple and efficient."
+                       textFill="#7A6658"
+                       wrapText="true"
+                       maxWidth="780.0"
+                       alignment="CENTER">
+
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+
+                </Label>
+
+            </VBox>
+
+            <!-- Features -->
+            <HBox alignment="CENTER"
+                  spacing="20.0">
+
+                <!-- Quality Coffee -->
+                <VBox alignment="CENTER"
+                      spacing="8.0"
+                      prefWidth="250.0"
+                      minHeight="135.0"
+                      style="-fx-background-color: #FFF9F3;
+                             -fx-background-radius: 18;
+                             -fx-border-color: #D6C2B3;
+                             -fx-border-radius: 18;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.10), 8, 0, 0, 2);">
+
+                    <Label text="☕"
+                           style="-fx-font-size: 28px;"/>
+
+                    <Label text="Quality Coffee"
+                           textFill="#4A3428">
+
+                        <font>
+                            <Font name="System Bold"
+                                  size="16.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Carefully prepared for every taste."
+                           textFill="#7A6658"
+                           wrapText="true"
+                           alignment="CENTER"
+                           maxWidth="210.0"/>
+
+                </VBox>
+
+                <!-- Easy Ordering -->
+                <VBox alignment="CENTER"
+                      spacing="8.0"
+                      prefWidth="250.0"
+                      minHeight="135.0"
+                      style="-fx-background-color: #FFF9F3;
+                             -fx-background-radius: 18;
+                             -fx-border-color: #D6C2B3;
+                             -fx-border-radius: 18;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.10), 8, 0, 0, 2);">
+
+                    <Label text="🛍"
+                           style="-fx-font-size: 28px;"/>
+
+                    <Label text="Easy Ordering"
+                           textFill="#4A3428">
+
+                        <font>
+                            <Font name="System Bold"
+                                  size="16.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="A simple and convenient ordering experience."
+                           textFill="#7A6658"
+                           wrapText="true"
+                           alignment="CENTER"
+                           maxWidth="210.0"/>
+
+                </VBox>
+
+                <!-- Efficient Management -->
+                <VBox alignment="CENTER"
+                      spacing="8.0"
+                      prefWidth="250.0"
+                      minHeight="135.0"
+                      style="-fx-background-color: #FFF9F3;
+                             -fx-background-radius: 18;
+                             -fx-border-color: #D6C2B3;
+                             -fx-border-radius: 18;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.10), 8, 0, 0, 2);">
+
+                    <Label text="⚡"
+                           style="-fx-font-size: 28px;"/>
+
+                    <Label text="Smart Management"
+                           textFill="#4A3428">
+
+                        <font>
+                            <Font name="System Bold"
+                                  size="16.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Organized tools for coffee shop operations."
+                           textFill="#7A6658"
+                           wrapText="true"
+                           alignment="CENTER"
+                           maxWidth="210.0"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- Footer Information -->
+            <HBox alignment="CENTER"
+                  spacing="35.0">
+
+                <Label fx:id="versionLabel"
+                       text="Version: 1.0"
+                       textFill="#8C7A6B"
+                       style="-fx-font-size: 13px;"/>
+
+                <Label text="•"
+                       textFill="#C8A98D"/>
+
+                <Label fx:id="contactLabel"
+                       text="Contact: coffeeflow@example.com"
+                       textFill="#8C7A6B"
+                       style="-fx-font-size: 13px;"/>
+
+            </HBox>
 
         </VBox>
     </center>
