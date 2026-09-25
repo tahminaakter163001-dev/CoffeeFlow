@@ -170,6 +170,20 @@
                            -fx-border-radius: 12;
                            -fx-background-radius: 12;
                            -fx-cursor: hand;"/>
+            <Button text="About Us"
+                    onAction="#handleAboutUs"
+                    maxWidth="290.0"
+                    prefWidth="290.0"
+                    prefHeight="42.0"
+                    style="-fx-background-color: #F5EFE6;
+                           -fx-text-fill: #6F4E37;
+                           -fx-font-size: 14px;
+                           -fx-font-weight: bold;
+                           -fx-border-color: #C8AD98;
+                           -fx-border-width: 1.2;
+                           -fx-border-radius: 12;
+                           -fx-background-radius: 12;
+                           -fx-cursor: hand;"/>
 
         </VBox>
 

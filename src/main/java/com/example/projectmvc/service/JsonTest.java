@@ -1,27 +1,23 @@
 package com.example.projectmvc.service;
 
-import com.example.projectmvc.model.ApiUser;
-import com.google.gson.Gson;
+import com.example.projectmvc.model.AboutUs;
 
 public class JsonTest {
 
     public static void main(String[] args) {
 
-        String url = "https://jsonplaceholder.typicode.com/users/1";
+        AboutUs aboutUs = JsonService.getAboutUs();
 
-        String json = JsonService.getJsonFromUrl(url);
+        if (aboutUs != null) {
 
-        System.out.println("JSON Response:");
-        System.out.println(json);
+            System.out.println("Title: " + aboutUs.getTitle());
+            System.out.println("Description: " + aboutUs.getDescription());
+            System.out.println("Version: " + aboutUs.getVersion());
+            System.out.println("Contact: " + aboutUs.getContact());
 
-        Gson gson = new Gson();
+        } else {
 
-        ApiUser user = gson.fromJson(json, ApiUser.class);
-
-        System.out.println("\nConverted Java Object:");
-        System.out.println("ID: " + user.getId());
-        System.out.println("Name: " + user.getName());
-        System.out.println("Username: " + user.getUsername());
-        System.out.println("Email: " + user.getEmail());
+            System.out.println("Failed to load About Us information.");
+        }
     }
 }

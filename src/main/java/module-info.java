@@ -11,6 +11,7 @@ module com.example.projectmvc {
 
     opens com.example.projectmvc to javafx.fxml;
     opens com.example.projectmvc.controller to javafx.fxml;
+    opens com.example.projectmvc.model to com.google.gson;
 
     exports com.example.projectmvc;
 }

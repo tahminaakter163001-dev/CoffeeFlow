@@ -16,6 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.concurrent.Task;
 
+import java.io.IOException;
+
 public class LoginController {
 
     @FXML
@@ -202,5 +204,30 @@ public class LoginController {
 
         stage.show();
     }
+    @FXML
+    private void handleAboutUs(ActionEvent event) {
 
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/example/projectmvc/view/about-us-view.fxml"
+                    )
+            );
+
+            Parent root = loader.load();
+
+            Stage stage =
+                    (Stage) ((Node) event.getSource())
+                            .getScene()
+                            .getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("CoffeeFlow - About Us");
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.projectmvc.service;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.example.projectmvc.model.AboutUs;
+import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,13 +10,17 @@ import java.net.http.HttpResponse;
 
 public class JsonService {
 
-    public static String getJsonFromUrl(String url) {
+    private static final String ABOUT_US_URL =
+            "https://raw.githubusercontent.com/tahminaakter163001-dev/CoffeeFlow/main/src/main/resources/json/about-us.json";
+
+    public static AboutUs getAboutUs() {
 
         try {
+
             HttpClient client = HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
+                    .uri(URI.create(ABOUT_US_URL))
                     .GET()
                     .build();
 
@@ -24,10 +28,14 @@ public class JsonService {
                     client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return response.body();
+
+                Gson gson = new Gson();
+
+                return gson.fromJson(response.body(), AboutUs.class);
             }
 
         } catch (Exception e) {
+
             e.printStackTrace();
         }
 
