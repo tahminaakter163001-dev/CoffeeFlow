@@ -68,6 +68,7 @@ public class DatabaseInitializer {
                      DatabaseConnection.getConnection();
              Statement statement =
                      connection.createStatement()) {
+            statement.execute("PRAGMA foreign_keys = ON");
 
             statement.execute(coffeeTable);
 
@@ -114,6 +115,7 @@ public class DatabaseInitializer {
             statement.execute(adminUser);
 
             statement.execute(customerUser);
+            addBillForeignKey(connection);
 
             System.out.println(
                     "Database tables created successfully!"
@@ -126,4 +128,106 @@ public class DatabaseInitializer {
             );
         }
     }
+    private static void addBillForeignKey(Connection connection)
+            throws SQLException {
+
+        String checkSql = """
+            PRAGMA foreign_key_list(orders)
+            """;
+
+        boolean foreignKeyExists = false;
+
+        try (Statement statement = connection.createStatement();
+             var resultSet = statement.executeQuery(checkSql)) {
+
+            while (resultSet.next()) {
+
+                String tableName = resultSet.getString("table");
+
+                String fromColumn = resultSet.getString("from");
+
+                String toColumn = resultSet.getString("to");
+
+                if ("bills".equalsIgnoreCase(tableName)
+                        && "bill_id".equalsIgnoreCase(fromColumn)
+                        && "id".equalsIgnoreCase(toColumn)) {
+
+                    foreignKeyExists = true;
+                    break;
+                }
+            }
+        }
+
+        if (foreignKeyExists) {
+
+            System.out.println(
+                    "Bill foreign key already exists."
+            );
+
+            return;
+        }
+
+        System.out.println(
+                "Adding bill foreign key..."
+        );
+
+        connection.setAutoCommit(false);
+
+        try (Statement statement = connection.createStatement()) {
+
+            statement.execute("""
+                CREATE TABLE orders_new (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    customer_name TEXT NOT NULL,
+                    coffee_name TEXT NOT NULL,
+                    size TEXT NOT NULL,
+                    quantity INTEGER NOT NULL,
+                    price REAL NOT NULL,
+                    total REAL NOT NULL,
+                    order_date TEXT NOT NULL,
+                    status TEXT NOT NULL DEFAULT 'Pending',
+                    bill_id INTEGER,
+                    FOREIGN KEY (bill_id) REFERENCES bills(id)
+                );
+                """);
+
+            statement.execute("""
+                INSERT INTO orders_new
+                (id, customer_name, coffee_name, size, quantity,
+                 price, total, order_date, status, bill_id)
+                SELECT
+                    id, customer_name, coffee_name, size, quantity,
+                    price, total, order_date, status, bill_id
+                FROM orders;
+                """);
+
+            statement.execute("DROP TABLE orders;");
+
+            statement.execute(
+                    "ALTER TABLE orders_new RENAME TO orders;"
+            );
+
+            connection.commit();
+
+            System.out.println(
+                    "Bill foreign key added successfully!"
+            );
+
+        } catch (SQLException e) {
+
+            connection.rollback();
+
+            System.out.println(
+                    "Foreign key migration error: "
+                            + e.getMessage()
+            );
+
+            throw e;
+
+        } finally {
+
+            connection.setAutoCommit(true);
+        }
+    }
+
 }
