@@ -68,10 +68,32 @@ public class HomeController {
         }
     }
 
-    @javafx.fxml.FXML
+    @FXML
     private void handleContact(ActionEvent event) {
 
-        System.out.println("Contact clicked");
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/example/projectmvc/view/contact-view.fxml"
+                    )
+            );
+
+            Parent root = loader.load();
+
+            Scene scene = ((Node) event.getSource())
+                    .getScene();
+
+            scene.setRoot(root);
+
+            Stage stage = (Stage) scene.getWindow();
+
+            stage.setTitle("CoffeeFlow - Contact");
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
     }
 
     @javafx.fxml.FXML

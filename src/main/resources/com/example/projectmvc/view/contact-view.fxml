@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.projectmvc.controller.ContactController"
+            minWidth="900.0"
+            minHeight="600.0"
+            prefWidth="1000.0"
+            prefHeight="650.0"
+            style="-fx-background-color: #F5EFE6;">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="20.0"
+              prefHeight="80.0"
+              style="-fx-background-color: #6F4E37;">
+
+            <padding>
+                <Insets top="0.0"
+                        right="35.0"
+                        bottom="0.0"
+                        left="35.0"/>
+            </padding>
+
+            <Label text="☕ CoffeeFlow"
+                   textFill="WHITE">
+
+                <font>
+                    <Font name="System Bold"
+                          size="24.0"/>
+                </font>
+
+            </Label>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Button text="← Back to Home"
+                    onAction="#handleBack"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: white;
+                           -fx-font-size: 13px;
+                           -fx-font-weight: bold;
+                           -fx-cursor: hand;"/>
+
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox alignment="TOP_CENTER"
+              spacing="25.0">
+
+            <padding>
+                <Insets top="45.0"
+                        right="50.0"
+                        bottom="40.0"
+                        left="50.0"/>
+            </padding>
+
+            <Label text="Contact Us"
+                   textFill="#4A3428">
+
+                <font>
+                    <Font name="System Bold"
+                          size="32.0"/>
+                </font>
+
+            </Label>
+
+            <Label text="We would love to hear from you."
+                   textFill="#8C7A6B">
+
+                <font>
+                    <Font size="15.0"/>
+                </font>
+
+            </Label>
+
+            <!-- Contact Information -->
+            <HBox alignment="CENTER"
+                  spacing="25.0">
+
+                <!-- Address -->
+                <VBox alignment="CENTER"
+                      spacing="10.0"
+                      prefWidth="250.0"
+                      minHeight="180.0"
+                      style="-fx-background-color: #FFF9F3;
+                             -fx-background-radius: 18;
+                             -fx-border-color: #D6C2B3;
+                             -fx-border-radius: 18;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.12), 10, 0, 0, 3);">
+
+                    <Label text="📍"
+                           style="-fx-font-size: 30px;"/>
+
+                    <Label text="Visit Us"
+                           textFill="#4A3428">
+
+                        <font>
+                            <Font name="System Bold"
+                                  size="18.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="Dhaka, Bangladesh"
+                           textFill="#7A6658"
+                           wrapText="true"
+                           alignment="CENTER"/>
+
+                </VBox>
+
+                <!-- Phone -->
+                <VBox alignment="CENTER"
+                      spacing="10.0"
+                      prefWidth="250.0"
+                      minHeight="180.0"
+                      style="-fx-background-color: #FFF9F3;
+                             -fx-background-radius: 18;
+                             -fx-border-color: #D6C2B3;
+                             -fx-border-radius: 18;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.12), 10, 0, 0, 3);">
+
+                    <Label text="📞"
+                           style="-fx-font-size: 30px;"/>
+
+                    <Label text="Call Us"
+                           textFill="#4A3428">
+
+                        <font>
+                            <Font name="System Bold"
+                                  size="18.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="+880 1XXX-XXXXXX"
+                           textFill="#7A6658"/>
+
+                </VBox>
+
+                <!-- Email -->
+                <VBox alignment="CENTER"
+                      spacing="10.0"
+                      prefWidth="250.0"
+                      minHeight="180.0"
+                      style="-fx-background-color: #FFF9F3;
+                             -fx-background-radius: 18;
+                             -fx-border-color: #D6C2B3;
+                             -fx-border-radius: 18;
+                             -fx-border-width: 1;
+                             -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.12), 10, 0, 0, 3);">
+
+                    <Label text="✉"
+                           style="-fx-font-size: 30px;"/>
+
+                    <Label text="Email Us"
+                           textFill="#4A3428">
+
+                        <font>
+                            <Font name="System Bold"
+                                  size="18.0"/>
+                        </font>
+
+                    </Label>
+
+                    <Label text="coffeeflow@example.com"
+                           textFill="#7A6658"
+                           wrapText="true"
+                           alignment="CENTER"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- Opening Hours -->
+            <VBox alignment="CENTER"
+                  spacing="8.0">
+
+                <Label text="☕ Opening Hours"
+                       textFill="#4A3428">
+
+                    <font>
+                        <Font name="System Bold"
+                              size="18.0"/>
+                    </font>
+
+                </Label>
+
+                <Label text="Monday - Sunday   |   8:00 AM - 10:00 PM"
+                       textFill="#7A6658"/>
+
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
