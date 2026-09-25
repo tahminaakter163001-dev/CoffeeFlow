@@ -230,4 +230,28 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleBackToHome(ActionEvent event) {
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/example/projectmvc/view/home-view.fxml"
+                    )
+            );
+
+            Parent root = loader.load();
+
+            Scene scene = ((Node) event.getSource()).getScene();
+            scene.setRoot(root);
+
+            Stage stage = (Stage) scene.getWindow();
+            stage.setTitle("CoffeeFlow");
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
 }

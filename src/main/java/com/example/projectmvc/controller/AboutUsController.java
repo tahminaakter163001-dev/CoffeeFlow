@@ -86,7 +86,7 @@ public class AboutUsController {
 
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(
-                            "/com/example/projectmvc/view/login-view.fxml"
+                            "/com/example/projectmvc/view/home-view.fxml"
                     )
             );
 

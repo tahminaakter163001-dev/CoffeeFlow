@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.projectmvc.controller.HomeController"
+            minWidth="900.0"
+            minHeight="600.0"
+            prefWidth="1000.0"
+            prefHeight="650.0">
+
+    <children>
+
+        <!-- Background -->
+        <ImageView fitWidth="1200.0"
+                   fitHeight="700.0"
+                   preserveRatio="false"
+                   smooth="true"
+                   AnchorPane.topAnchor="0.0"
+                   AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0">
+
+            <image>
+                <Image url="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&amp;fit=crop&amp;w=1600&amp;q=85"
+                       backgroundLoading="true"/>
+            </image>
+
+        </ImageView>
+
+
+        <!-- Dark Overlay -->
+        <AnchorPane style="-fx-background-color: rgba(20, 12, 8, 0.58);"
+                    AnchorPane.topAnchor="0.0"
+                    AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0"/>
+
+
+        <!-- Main Content -->
+        <VBox alignment="TOP_CENTER"
+              spacing="0.0"
+              AnchorPane.topAnchor="0.0"
+              AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0">
+
+            <!-- Navigation Bar -->
+            <HBox alignment="CENTER_LEFT"
+                  spacing="30.0"
+                  prefHeight="80.0"
+                  maxHeight="80.0"
+                  style="-fx-background-color: rgba(255,255,255,0.10);
+             -fx-border-color: rgba(255,255,255,0.18);
+             -fx-border-width: 0 0 1 0;">
+
+                <padding>
+                    <Insets top="0.0"
+                            right="45.0"
+                            bottom="0.0"
+                            left="45.0"/>
+                </padding>
+
+                <!-- Logo -->
+                <Label text="☕ CoffeeFlow"
+                       textFill="WHITE">
+                    <font>
+                        <Font name="System Bold"
+                              size="24.0"/>
+                    </font>
+                </Label>
+
+                <!-- Spacer -->
+                <HBox HBox.hgrow="ALWAYS"/>
+
+                <!-- Navigation -->
+                <Button text="HOME"
+                        onAction="#handleHome"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: white;
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;"/>
+
+                <Button text="ABOUT US"
+                        onAction="#handleAboutUs"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: white;
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;"/>
+
+                <Button text="MENU"
+                        onAction="#handleMenu"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: white;
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;"/>
+
+                <Button text="CONTACT"
+                        onAction="#handleContact"
+                        style="-fx-background-color: transparent;
+                               -fx-text-fill: white;
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;
+                               -fx-cursor: hand;"/>
+
+            </HBox>
+
+
+            <!-- Hero Area -->
+            <StackPane VBox.vgrow="ALWAYS">
+
+                <VBox alignment="CENTER"
+                      spacing="18.0"
+                      maxWidth="700.0"
+                      maxHeight="500.0">
+
+                    <!-- Small Heading -->
+                    <Label text="—  CRAFTED FOR COFFEE LOVERS  —"
+                           textFill="#E8C9A8">
+                        <font>
+                            <Font name="System Bold"
+                                  size="14.0"/>
+                        </font>
+                    </Label>
+
+
+                    <!-- Main Heading -->
+                    <Label text="YOUR COFFEE,&#10;YOUR MOMENT."
+                           textFill="WHITE"
+                           textAlignment="CENTER"
+                           alignment="CENTER">
+                        <font>
+                            <Font name="System Bold"
+                                  size="52.0"/>
+                        </font>
+                    </Label>
+
+
+                    <!-- Description -->
+                    <Label text="Every cup is prepared with care, passion&#10;and a little CoffeeFlow."
+                           textFill="#F4EDE6"
+                           textAlignment="CENTER"
+                           alignment="CENTER">
+                        <font>
+                            <Font size="17.0"/>
+                        </font>
+                    </Label>
+
+
+                    <!-- Order Prompt -->
+                    <Label text="Ready for your next favorite cup?"
+                           textFill="#E8C9A8">
+                        <font>
+                            <Font name="System Italic"
+                                  size="15.0"/>
+                        </font>
+                    </Label>
+
+
+                    <!-- Main Order Button -->
+                    <Button text="☕   ORDER NOW   →"
+                            onAction="#handleOrderNow"
+                            prefWidth="230.0"
+                            prefHeight="58.0"
+                            style="-fx-background-color: #C88A55;
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 30;
+                                   -fx-border-radius: 30;
+                                   -fx-cursor: hand;
+                                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.40), 18, 0, 0, 6);"/>
+
+
+                    <!-- Small Features -->
+                    <HBox alignment="CENTER"
+                          spacing="28.0">
+
+                        <padding>
+                            <Insets top="20.0"
+                                    right="0.0"
+                                    bottom="0.0"
+                                    left="0.0"/>
+                        </padding>
+
+                        <Label text="☕ Freshly Brewed"
+                               textFill="#F4EDE6">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                        </Label>
+
+                        <Label text="•"
+                               textFill="#C88A55"/>
+
+                        <Label text="♥ Carefully Crafted"
+                               textFill="#F4EDE6">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                        </Label>
+
+                        <Label text="•"
+                               textFill="#C88A55"/>
+
+                        <Label text="★ Made For You"
+                               textFill="#F4EDE6">
+                            <font>
+                                <Font size="13.0"/>
+                            </font>
+                        </Label>
+
+                    </HBox>
+
+                </VBox>
+
+            </StackPane>
+
+        </VBox>
+
+    </children>
+
+</AnchorPane>

@@ -26,12 +26,14 @@
               spacing="18.0"
               prefWidth="410.0"
               prefHeight="520.0"
-              maxWidth="410.0"
-              maxHeight="520.0"
-              AnchorPane.leftAnchor="245.0"
-              AnchorPane.rightAnchor="245.0"
-              AnchorPane.topAnchor="40.0"
-              AnchorPane.bottomAnchor="40.0"
+              minWidth="360.0"
+              minHeight="480.0"
+              maxWidth="600.0"
+              maxHeight="560.0"
+              AnchorPane.leftAnchor="80.0"
+              AnchorPane.rightAnchor="80.0"
+              AnchorPane.topAnchor="20.0"
+              AnchorPane.bottomAnchor="20.0"
               style="-fx-background-color: #FFF9F3;
                      -fx-background-radius: 24;
                      -fx-effect: dropshadow(gaussian, rgba(60,40,25,0.20), 25, 0, 0, 7);">
@@ -170,20 +172,17 @@
                            -fx-border-radius: 12;
                            -fx-background-radius: 12;
                            -fx-cursor: hand;"/>
-            <Button text="About Us"
-                    onAction="#handleAboutUs"
+            <Button text="← Back to Home"
+                    mnemonicParsing="false"
+                    onAction="#handleBackToHome"
                     maxWidth="290.0"
                     prefWidth="290.0"
-                    prefHeight="42.0"
-                    style="-fx-background-color: #F5EFE6;
-                           -fx-text-fill: #6F4E37;
-                           -fx-font-size: 14px;
-                           -fx-font-weight: bold;
-                           -fx-border-color: #C8AD98;
-                           -fx-border-width: 1.2;
-                           -fx-border-radius: 12;
-                           -fx-background-radius: 12;
-                           -fx-cursor: hand;"/>
+                    prefHeight="36.0"
+                    style="-fx-background-color: transparent;
+               -fx-text-fill: #8C7A6B;
+               -fx-font-size: 13px;
+               -fx-font-weight: bold;
+               -fx-cursor: hand;"/>
 
         </VBox>
 

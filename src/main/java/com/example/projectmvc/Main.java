@@ -14,7 +14,7 @@ public class Main extends Application {
         DatabaseInitializer.createTables();
 
         FXMLLoader fxmlLoader =
-                new FXMLLoader(Main.class.getResource("/com/example/projectmvc/view/login-view.fxml"));
+                new FXMLLoader(Main.class.getResource("/com/example/projectmvc/view/home-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
 
