@@ -11,8 +11,7 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class CoffeeDAO {
-
+public class CoffeeDAO implements DAO {
     // Add coffee to database
     public boolean addCoffee(Coffee coffee) {
 
