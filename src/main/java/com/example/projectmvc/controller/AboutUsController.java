@@ -9,10 +9,17 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AboutUsController {
+    private final ExecutorService executor =
+            Executors.newFixedThreadPool(2, runnable -> {
+                Thread thread = new Thread(runnable, "coffeeflow-json-worker");
+                thread.setDaemon(true);
+                return thread;
+            });
 
     @FXML
     private javafx.scene.control.Label titleLabel;
@@ -29,26 +36,51 @@ public class AboutUsController {
     @FXML
     public void initialize() {
 
-        AboutUs aboutUs = JsonService.getAboutUs();
+        javafx.concurrent.Task<AboutUs> task =
+                new javafx.concurrent.Task<>() {
 
-        if (aboutUs != null) {
+                    @Override
+                    protected AboutUs call() throws Exception {
+                        return JsonService.getAboutUs();
+                    }
+                };
 
-            titleLabel.setText(aboutUs.getTitle());
-            descriptionLabel.setText(aboutUs.getDescription());
-            versionLabel.setText("Version: " + aboutUs.getVersion());
-            contactLabel.setText("Contact: " + aboutUs.getContact());
+        task.setOnSucceeded(event -> {
 
-        } else {
+            AboutUs aboutUs = task.getValue();
+
+            if (aboutUs != null) {
+
+                titleLabel.setText(aboutUs.getTitle());
+                descriptionLabel.setText(aboutUs.getDescription());
+                versionLabel.setText("Version: " + aboutUs.getVersion());
+                contactLabel.setText("Contact: " + aboutUs.getContact());
+
+            } else {
+
+                titleLabel.setText("About CoffeeFlow");
+                descriptionLabel.setText(
+                        "Unable to load About Us information."
+                );
+            }
+        });
+
+        task.setOnFailed(event -> {
 
             titleLabel.setText("About CoffeeFlow");
             descriptionLabel.setText(
                     "Unable to load About Us information."
             );
-        }
+
+            task.getException().printStackTrace();
+        });
+
+        executor.execute(task);
     }
 
     @FXML
     private void handleBack(ActionEvent event) {
+        executor.shutdownNow();
 
         try {
 

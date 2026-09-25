@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.concurrent.Task;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 public class MenuController {
 
     @FXML
@@ -46,6 +48,12 @@ public class MenuController {
     private final CoffeeDAO coffeeDAO = new CoffeeDAO();
     private ObservableList<CoffeeMenuRow> coffeeList;
     private FilteredList<CoffeeMenuRow> filteredData;
+    private final ExecutorService executor =
+            Executors.newFixedThreadPool(2, runnable -> {
+                Thread thread = new Thread(runnable, "coffeeflow-db-worker");
+                thread.setDaemon(true);
+                return thread;
+            });
 
 
     @FXML
@@ -118,12 +126,7 @@ public class MenuController {
             );
         });
 
-        Thread coffeeThread =
-                new Thread(coffeeTask);
-
-        coffeeThread.setDaemon(true);
-
-        coffeeThread.start();
+        executor.execute(coffeeTask);
     }
 
     private void setupSearch() {
@@ -218,6 +221,7 @@ public class MenuController {
     @FXML
     private void goBack(ActionEvent event) throws Exception {
 
+        executor.shutdownNow();
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
                         "/com/example/projectmvc/view/dashboard-view.fxml"
@@ -333,12 +337,6 @@ public class MenuController {
             );
         });
 
-        // Start background thread
-        Thread deleteThread =
-                new Thread(deleteTask);
-
-        deleteThread.setDaemon(true);
-
-        deleteThread.start();
+        executor.execute(deleteTask);
     }
 }
