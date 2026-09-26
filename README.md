@@ -89,16 +89,10 @@ Main database entities include:
 ### 🌐 HTTP & JSON
 
 The project fetches JSON data from an internet URL through an HTTP request and uses the **Gson library** to parse the JSON data into Java objects.
+uses the Gson library to parse the JSON data into Java objects.
 
-Internet URL
-     ↓
- HTTP Request
-     ↓
-JSON Response
-     ↓
-Jackson ObjectMapper
-     ↓
- Java Object
+Internet URL -> HTTP Request -> JSON Response -> Jackson ObjectMapper-> Java Object
+
 
 ## 📂 Project Structure
 
@@ -121,7 +115,7 @@ CoffeeFlow
 
 ### 👨‍💼 Admin Dashboard
 
-![Admin Dashboard](screenshots/Admin%20Dashboard.png)
+![Admin Dashboard](screenshots/AdminDashboard.png)
 
 ### ☕ Coffee Menu
 
