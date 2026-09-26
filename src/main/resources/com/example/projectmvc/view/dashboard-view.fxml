@@ -131,8 +131,8 @@
                       spacing="5.0"
                       prefWidth="150.0"
                       prefHeight="90.0"
-                      style="-fx-background-color: #E8D8C8;
-                             -fx-background-radius: 10;">
+                      style="-fx-background-color: #EFE2D5;
+                 -fx-background-radius: 10;">
 
                     <Label text="Total Orders"
                            style="-fx-font-weight: bold;"/>
@@ -140,7 +140,7 @@
                     <Label fx:id="totalOrdersCount"
                            text="0"
                            style="-fx-font-size: 24px;
-                                  -fx-font-weight: bold;"/>
+                      -fx-font-weight: bold;"/>
 
                 </VBox>
 
@@ -152,8 +152,8 @@
                       spacing="5.0"
                       prefWidth="150.0"
                       prefHeight="90.0"
-                      style="-fx-background-color: #FFF3CD;
-                             -fx-background-radius: 10;">
+                      style="-fx-background-color: #F3E4C8;
+                 -fx-background-radius: 10;">
 
                     <Label text="Pending"
                            style="-fx-font-weight: bold;"/>
@@ -161,7 +161,7 @@
                     <Label fx:id="pendingCount"
                            text="0"
                            style="-fx-font-size: 24px;
-                                  -fx-font-weight: bold;"/>
+                      -fx-font-weight: bold;"/>
 
                 </VBox>
 
@@ -173,8 +173,8 @@
                       spacing="5.0"
                       prefWidth="150.0"
                       prefHeight="90.0"
-                      style="-fx-background-color: #D9EAD3;
-                             -fx-background-radius: 10;">
+                      style="-fx-background-color: #DDE9DC;
+                 -fx-background-radius: 10;">
 
                     <Label text="Confirmed"
                            style="-fx-font-weight: bold;"/>
@@ -182,7 +182,7 @@
                     <Label fx:id="confirmedCount"
                            text="0"
                            style="-fx-font-size: 24px;
-                                  -fx-font-weight: bold;"/>
+                      -fx-font-weight: bold;"/>
 
                 </VBox>
 
@@ -194,8 +194,8 @@
                       spacing="5.0"
                       prefWidth="150.0"
                       prefHeight="90.0"
-                      style="-fx-background-color: #DCEBFF;
-                             -fx-background-radius: 10;">
+                      style="-fx-background-color: #DCE7E8;
+                 -fx-background-radius: 10;">
 
                     <Label text="Preparing"
                            style="-fx-font-weight: bold;"/>
@@ -203,7 +203,7 @@
                     <Label fx:id="preparingCount"
                            text="0"
                            style="-fx-font-size: 24px;
-                                  -fx-font-weight: bold;"/>
+                      -fx-font-weight: bold;"/>
 
                 </VBox>
 
@@ -215,8 +215,8 @@
                       spacing="5.0"
                       prefWidth="150.0"
                       prefHeight="90.0"
-                      style="-fx-background-color: #E8DDF5;
-                             -fx-background-radius: 10;">
+                      style="-fx-background-color: #E1E8D9;
+                 -fx-background-radius: 10;">
 
                     <Label text="Ready"
                            style="-fx-font-weight: bold;"/>
@@ -224,7 +224,7 @@
                     <Label fx:id="readyCount"
                            text="0"
                            style="-fx-font-size: 24px;
-                                  -fx-font-weight: bold;"/>
+                      -fx-font-weight: bold;"/>
 
                 </VBox>
 
@@ -236,8 +236,8 @@
                       spacing="5.0"
                       prefWidth="150.0"
                       prefHeight="90.0"
-                      style="-fx-background-color: #F8D7DA;
-                             -fx-background-radius: 10;">
+                      style="-fx-background-color: #EEDDDD;
+                 -fx-background-radius: 10;">
 
                     <Label text="Cancelled"
                            style="-fx-font-weight: bold;"/>
@@ -245,7 +245,7 @@
                     <Label fx:id="cancelledCount"
                            text="0"
                            style="-fx-font-size: 24px;
-                                  -fx-font-weight: bold;"/>
+                      -fx-font-weight: bold;"/>
 
                 </VBox>
 

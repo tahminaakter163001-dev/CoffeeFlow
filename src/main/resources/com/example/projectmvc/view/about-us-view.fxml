@@ -235,25 +235,7 @@
                 </VBox>
 
             </HBox>
-
-            <!-- Footer Information -->
-            <HBox alignment="CENTER"
-                  spacing="35.0">
-
-                <Label fx:id="versionLabel"
-                       text="Version: 1.0"
-                       textFill="#8C7A6B"
-                       style="-fx-font-size: 13px;"/>
-
-                <Label text="•"
-                       textFill="#C8A98D"/>
-
-                <Label fx:id="contactLabel"
-                       text="Contact: coffeeflow@example.com"
-                       textFill="#8C7A6B"
-                       style="-fx-font-size: 13px;"/>
-
-            </HBox>
+            
 
         </VBox>
     </center>
