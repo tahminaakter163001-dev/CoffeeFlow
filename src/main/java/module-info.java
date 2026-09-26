@@ -8,6 +8,7 @@ module com.example.projectmvc {
     requires org.kordamp.bootstrapfx.core;
     requires java.net.http;
     requires com.google.gson;
+    requires com.fasterxml.jackson.databind;
 
     opens com.example.projectmvc to javafx.fxml;
     opens com.example.projectmvc.controller to javafx.fxml;

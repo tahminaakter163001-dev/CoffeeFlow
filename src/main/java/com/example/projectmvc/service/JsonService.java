@@ -1,7 +1,7 @@
 package com.example.projectmvc.service;
 
 import com.example.projectmvc.model.AboutUs;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -29,9 +29,9 @@ public class JsonService {
 
             if (response.statusCode() == 200) {
 
-                Gson gson = new Gson();
+                ObjectMapper objectMapper = new ObjectMapper();
 
-                return gson.fromJson(response.body(), AboutUs.class);
+                return objectMapper.readValue(response.body(), AboutUs.class);
             }
 
         } catch (Exception e) {

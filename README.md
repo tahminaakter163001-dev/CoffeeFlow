@@ -37,7 +37,7 @@
 * **SQLite**
 * **JDBC**
 * **Maven**
-* **Gson**
+* **Jackson**
 * **Git & GitHub**
 
 ## 🧩 Key Concepts
@@ -90,28 +90,24 @@ Main database entities include:
 
 The project fetches JSON data from an internet URL through an HTTP request and uses the **Gson library** to parse the JSON data into Java objects.
 
-```text
 Internet URL
      ↓
  HTTP Request
      ↓
- JSON Data
+JSON Response
      ↓
-   Gson
+Jackson ObjectMapper
      ↓
  Java Object
-```
 
 ## 📂 Project Structure
 
-```text
 CoffeeFlow
 ├── src
 ├── screenshots
 ├── coffeeflow.db
 ├── pom.xml
 └── README.md
-```
 
 ## 📸 Screenshots
 
@@ -149,7 +145,7 @@ CoffeeFlow
 2. Open the project in IntelliJ IDEA.
 3. Configure a compatible JDK.
 4. Allow Maven to download the required dependencies.
-5. Run the `Main` class.
+5. Run the Main class.
 
 ## 👩‍💻 Project Information
 
