@@ -740,4 +740,106 @@ public class OrderDAO {
 
         return false;
     }
+    public ObservableList<AdminOrder> getBaristaOrders() {
+
+        ObservableList<AdminOrder> orders =
+                FXCollections.observableArrayList();
+
+        String sql = """
+        SELECT id,
+               customer_name,
+               coffee_name,
+               size,
+               quantity,
+               price,
+               total,
+               order_date,
+               status
+        FROM orders
+        WHERE status = 'Confirmed'
+           OR status = 'Preparing'
+        ORDER BY id ASC
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
+             ResultSet resultSet =
+                     statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                AdminOrder order =
+                        new AdminOrder(
+                                resultSet.getInt("id"),
+                                resultSet.getString("customer_name"),
+                                resultSet.getString("coffee_name"),
+                                resultSet.getString("size"),
+                                resultSet.getInt("quantity"),
+                                resultSet.getDouble("price"),
+                                resultSet.getDouble("total"),
+                                resultSet.getString("order_date"),
+                                resultSet.getString("status")
+                        );
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Barista order loading error: "
+                            + e.getMessage()
+            );
+        }
+
+        return orders;
+    }
+
+
+    public boolean updateBaristaOrderStatus(
+            int orderId,
+            String newStatus) {
+
+        String sql = """
+        UPDATE orders
+        SET status = ?
+        WHERE id = ?
+          AND (
+              status = 'Confirmed'
+              OR status = 'Preparing'
+          )
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, newStatus);
+            statement.setInt(2, orderId);
+
+            int rowsUpdated =
+                    statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+
+                System.out.println(
+                        "Barista order status updated successfully!"
+                );
+
+                return true;
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Barista status update error: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
+    }
 }
