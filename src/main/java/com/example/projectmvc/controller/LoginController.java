@@ -92,8 +92,23 @@ public class LoginController {
                                 "CoffeeFlow - Admin Dashboard"
                         );
 
-                    } else if (
-                            user.getRole().equals("customer")) {
+                    } else if (user.getRole().equals("cashier")) {
+
+                        openPage(
+                                event,
+                                "/com/example/projectmvc/view/cashier-dashboard-view.fxml",
+                                "CoffeeFlow - Cashier Dashboard"
+                        );
+
+                    } else if (user.getRole().equals("barista")) {
+
+                        openPage(
+                                event,
+                                "/com/example/projectmvc/view/barista-dashboard-view.fxml",
+                                "CoffeeFlow - Barista Dashboard"
+                        );
+
+                    } else if (user.getRole().equals("customer")) {
 
                         openPage(
                                 event,

@@ -8,9 +8,6 @@ import com.example.projectmvc.model.CustomerOrder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -195,6 +192,62 @@ public class OrderDAO {
 
             System.out.println(
                     "Error loading all orders: "
+                            + e.getMessage()
+            );
+        }
+
+        return orders;
+    }
+    public ObservableList<AdminOrder> getCashierOrders() {
+
+        ObservableList<AdminOrder> orders =
+                FXCollections.observableArrayList();
+
+        String sql = """
+        SELECT id,
+               customer_name,
+               coffee_name,
+               size,
+               quantity,
+               price,
+               total,
+               order_date,
+               status
+        FROM orders
+        WHERE status = 'Pending'
+           OR status = 'Confirmed'
+        ORDER BY id ASC
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
+             ResultSet resultSet =
+                     statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                AdminOrder order =
+                        new AdminOrder(
+                                resultSet.getInt("id"),
+                                resultSet.getString("customer_name"),
+                                resultSet.getString("coffee_name"),
+                                resultSet.getString("size"),
+                                resultSet.getInt("quantity"),
+                                resultSet.getDouble("price"),
+                                resultSet.getDouble("total"),
+                                resultSet.getString("order_date"),
+                                resultSet.getString("status")
+                        );
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Cashier order loading error: "
                             + e.getMessage()
             );
         }
@@ -648,5 +701,43 @@ public class OrderDAO {
 
             return false;
         }
+    }
+    public boolean confirmOrder(int orderId) {
+
+        String sql = """
+        UPDATE orders
+        SET status = 'Confirmed'
+        WHERE id = ?
+          AND status = 'Pending'
+        """;
+
+        try (Connection connection =
+                     DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setInt(1, orderId);
+
+            int rowsUpdated =
+                    statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+
+                System.out.println(
+                        "Order confirmed successfully!"
+                );
+
+                return true;
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Order confirmation error: "
+                            + e.getMessage()
+            );
+        }
+
+        return false;
     }
 }

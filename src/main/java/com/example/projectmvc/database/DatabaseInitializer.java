@@ -63,6 +63,17 @@ public class DatabaseInitializer {
                 (username, password, role)
                 VALUES ('customer', '1234', 'customer');
                 """;
+        String cashierUser = """
+                INSERT OR IGNORE INTO users
+                (username, password, role)
+                VALUES ('cashier', '1234', 'cashier');
+                """;
+
+        String baristaUser = """
+                INSERT OR IGNORE INTO users
+                (username, password, role)
+                VALUES ('barista', '1234', 'barista');
+                """;
 
         try (Connection connection =
                      DatabaseConnection.getConnection();
@@ -115,6 +126,9 @@ public class DatabaseInitializer {
             statement.execute(adminUser);
 
             statement.execute(customerUser);
+            statement.execute(cashierUser);
+
+            statement.execute(baristaUser);
             addBillForeignKey(connection);
 
             System.out.println(
