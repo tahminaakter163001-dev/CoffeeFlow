@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -12,10 +13,10 @@
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.projectmvc.controller.DashboardController"
-            minWidth="600.0"
-            minHeight="400.0"
-            prefWidth="900.0"
-            prefHeight="600.0">
+            minWidth="750.0"
+            minHeight="500.0"
+            prefWidth="1000.0"
+            prefHeight="650.0">
 
     <!-- Top Header -->
     <top>
@@ -40,7 +41,7 @@
 
             </Label>
 
-            <Label text="Coffee Shop Management System"
+            <Label text="Admin Dashboard"
                    textFill="WHITE">
 
                 <font>
@@ -51,6 +52,7 @@
 
         </VBox>
     </top>
+
 
     <!-- Left Navigation -->
     <left>
@@ -74,29 +76,19 @@
                     prefHeight="40.0"
                     onAction="#openCoffeeMenu"/>
 
-            <Button text="Orders"
-                    maxWidth="Infinity"
-                    prefHeight="40.0"
-                    onAction="#openOrders"/>
-
-            <Button text="Billing"
-                    maxWidth="Infinity"
-                    prefHeight="40.0"
-                    onAction="#openBilling"/>
-
             <Button text="Logout"
                     onAction="#logout"
                     maxWidth="Infinity"
-                    prefWidth="120.0"
                     prefHeight="40.0"/>
 
         </VBox>
     </left>
 
+
     <!-- Main Content -->
     <center>
-        <VBox alignment="CENTER"
-              spacing="22.0">
+        <VBox alignment="TOP_CENTER"
+              spacing="20.0">
 
             <padding>
                 <Insets top="25.0"
@@ -105,118 +97,178 @@
                         left="25.0"/>
             </padding>
 
-            <Label text="Welcome to CoffeeFlow">
+
+            <Label text="Admin Overview">
 
                 <font>
                     <Font name="System Bold"
-                          size="30.0"/>
+                          size="28.0"/>
                 </font>
 
             </Label>
 
-            <Label text="Manage your coffee shop easily and efficiently."
+
+            <Label text="Monitor the overall coffee shop activity."
                    wrapText="true">
 
                 <font>
-                    <Font size="17.0"/>
+                    <Font size="16.0"/>
                 </font>
 
             </Label>
 
-            <!-- Order Summary -->
-            <Label text="Order Status Summary">
 
-                <font>
-                    <Font name="System Bold"
-                          size="20.0"/>
-                </font>
+            <!-- Summary Cards -->
+            <GridPane hgap="12.0"
+                      vgap="12.0"
+                      alignment="CENTER"
+                      maxWidth="700.0">
 
-            </Label>
-
-            <HBox alignment="CENTER"
-                  spacing="10.0">
-
-                <VBox alignment="CENTER"
+                <!-- Total Orders -->
+                <VBox GridPane.columnIndex="0"
+                      GridPane.rowIndex="0"
+                      alignment="CENTER"
                       spacing="5.0"
-                      prefWidth="105.0"
-                      prefHeight="75.0"
-                      style="-fx-background-color: #FFF3CD;">
+                      prefWidth="150.0"
+                      prefHeight="90.0"
+                      style="-fx-background-color: #E8D8C8;
+                             -fx-background-radius: 10;">
+
+                    <Label text="Total Orders"
+                           style="-fx-font-weight: bold;"/>
+
+                    <Label fx:id="totalOrdersCount"
+                           text="0"
+                           style="-fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
+
+                </VBox>
+
+
+                <!-- Pending -->
+                <VBox GridPane.columnIndex="1"
+                      GridPane.rowIndex="0"
+                      alignment="CENTER"
+                      spacing="5.0"
+                      prefWidth="150.0"
+                      prefHeight="90.0"
+                      style="-fx-background-color: #FFF3CD;
+                             -fx-background-radius: 10;">
 
                     <Label text="Pending"
                            style="-fx-font-weight: bold;"/>
 
                     <Label fx:id="pendingCount"
                            text="0"
-                           style="-fx-font-size: 22px;
-                              -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
 
                 </VBox>
 
-                <VBox alignment="CENTER"
+
+                <!-- Confirmed -->
+                <VBox GridPane.columnIndex="2"
+                      GridPane.rowIndex="0"
+                      alignment="CENTER"
                       spacing="5.0"
-                      prefWidth="105.0"
-                      prefHeight="75.0"
-                      style="-fx-background-color: #DCEBFF;">
+                      prefWidth="150.0"
+                      prefHeight="90.0"
+                      style="-fx-background-color: #D9EAD3;
+                             -fx-background-radius: 10;">
+
+                    <Label text="Confirmed"
+                           style="-fx-font-weight: bold;"/>
+
+                    <Label fx:id="confirmedCount"
+                           text="0"
+                           style="-fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
+
+                </VBox>
+
+
+                <!-- Preparing -->
+                <VBox GridPane.columnIndex="0"
+                      GridPane.rowIndex="1"
+                      alignment="CENTER"
+                      spacing="5.0"
+                      prefWidth="150.0"
+                      prefHeight="90.0"
+                      style="-fx-background-color: #DCEBFF;
+                             -fx-background-radius: 10;">
 
                     <Label text="Preparing"
                            style="-fx-font-weight: bold;"/>
 
                     <Label fx:id="preparingCount"
                            text="0"
-                           style="-fx-font-size: 22px;
-                              -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
 
                 </VBox>
 
-                <VBox alignment="CENTER"
+
+                <!-- Ready -->
+                <VBox GridPane.columnIndex="1"
+                      GridPane.rowIndex="1"
+                      alignment="CENTER"
                       spacing="5.0"
-                      prefWidth="105.0"
-                      prefHeight="75.0"
-                      style="-fx-background-color: #E8DDF5;">
+                      prefWidth="150.0"
+                      prefHeight="90.0"
+                      style="-fx-background-color: #E8DDF5;
+                             -fx-background-radius: 10;">
 
                     <Label text="Ready"
                            style="-fx-font-weight: bold;"/>
 
                     <Label fx:id="readyCount"
                            text="0"
-                           style="-fx-font-size: 22px;
-                              -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
 
                 </VBox>
 
-                <VBox alignment="CENTER"
+
+                <!-- Cancelled -->
+                <VBox GridPane.columnIndex="2"
+                      GridPane.rowIndex="1"
+                      alignment="CENTER"
                       spacing="5.0"
-                      prefWidth="105.0"
-                      prefHeight="75.0"
-                      style="-fx-background-color: #DFF2E1;">
-
-                    <Label text="Completed"
-                           style="-fx-font-weight: bold;"/>
-
-                    <Label fx:id="completedCount"
-                           text="0"
-                           style="-fx-font-size: 22px;
-                              -fx-font-weight: bold;"/>
-
-                </VBox>
-
-                <VBox alignment="CENTER"
-                      spacing="5.0"
-                      prefWidth="105.0"
-                      prefHeight="75.0"
-                      style="-fx-background-color: #F8D7DA;">
+                      prefWidth="150.0"
+                      prefHeight="90.0"
+                      style="-fx-background-color: #F8D7DA;
+                             -fx-background-radius: 10;">
 
                     <Label text="Cancelled"
                            style="-fx-font-weight: bold;"/>
 
                     <Label fx:id="cancelledCount"
                            text="0"
-                           style="-fx-font-size: 22px;
-                              -fx-font-weight: bold;"/>
+                           style="-fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
 
                 </VBox>
 
-            </HBox>
+            </GridPane>
+
+
+            <!-- Total Sales -->
+            <VBox alignment="CENTER"
+                  spacing="5.0"
+                  prefWidth="320.0"
+                  prefHeight="95.0"
+                  style="-fx-background-color: #DFF2E1;
+                         -fx-background-radius: 10;">
+
+                <Label text="Total Sales"
+                       style="-fx-font-weight: bold;"/>
+
+                <Label fx:id="totalSalesCount"
+                       text="0.00 Tk"
+                       style="-fx-font-size: 26px;
+                              -fx-font-weight: bold;"/>
+
+            </VBox>
 
         </VBox>
     </center>

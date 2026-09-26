@@ -131,7 +131,7 @@ public class MyOrdersController {
 
                         setText(status);
 
-                        if (status.equals("Completed")) {
+                        if (status.equals("Ready")) {
 
                             setStyle(
                                     "-fx-text-fill: green;" +

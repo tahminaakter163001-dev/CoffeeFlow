@@ -329,6 +329,34 @@ public class OrderDAO {
 
         return 0;
     }
+    public double getTotalSales() {
+
+        String sql = """
+            SELECT COALESCE(SUM(total), 0)
+            FROM orders
+            WHERE status != 'Cancelled'
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
+             ResultSet resultSet =
+                     statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return resultSet.getDouble(1);
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println(
+                    "Total sales loading error: "
+                            + e.getMessage()
+            );
+        }
+
+        return 0.0;
+    }
     public boolean saveBillWithOrders(
             String customerName,
             double totalAmount,
