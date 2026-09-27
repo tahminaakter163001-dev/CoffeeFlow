@@ -93,6 +93,14 @@ uses the Gson library to parse the JSON data into Java objects.
 
 Internet URL -> HTTP Request -> JSON Response -> Jackson ObjectMapper-> Java Object
 
+## Development Workflow
+
+Git branching is used to organize development work.
+New features and documentation updates can be developed
+in separate branches before being merged into the main branch.
+
+The project uses commits to track changes and pull requests
+to review and merge updates.
 
 ## 📂 Project Structure
 
